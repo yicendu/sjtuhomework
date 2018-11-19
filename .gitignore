@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/.vs/intersectiondiscovery/v15
+/src/x64/Debug
+/src/GeneratedFiles
+/src/debug
+/src/x64/Release
+/src/release
