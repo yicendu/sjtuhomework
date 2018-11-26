@@ -3,6 +3,8 @@
 
 #define MAX_ELE_NUM 5
 #define NULL 0
+
+#include <set>
 //octree is a cubic tree. Each length of its eages is the same.
 struct Region {
 	double x;//x
@@ -34,38 +36,27 @@ struct EleChain {
 
 };
 
-struct OcTreeNode {
-	int depth;	// 0 means root
-	double min_length;
-    int is_leaf;
-    struct Region region;
-	struct OcTreeNode *x1y1z1;
-    struct OcTreeNode *x1y1z2;
-    struct OcTreeNode *x1y2z1;
-    struct OcTreeNode *x1y2z2;
-	struct OcTreeNode *x2y1z1;
-	struct OcTreeNode *x2y1z2;
-	struct OcTreeNode *x2y2z1;
-	struct OcTreeNode *x2y2z2;
-	int ele_num;
-	struct EleChain *ele_head;
+
+class Octree
+{
+public:
+	Octree(int depth, Region region, double min_length, int max_ele_num);
+	~Octree();
+
+	void insertEle(EleFace* ele);
+	std::set<EleFace*> queryEles(Region region);
+
+private:
+	void splitNode();
+
+private:
+	int		m_depth;	// 0 means root
+	double	m_min_length;
+	bool	m_is_leaf;
+	Region	m_region;
+	Octree*	m_sub_node[8];
+
+	int		m_max_ele_num;
+	std::set<EleFace*> m_eles;
 };
-
-void initNode(struct OcTreeNode* node, int depth, struct Region region, double min_length);
-
-void insertEle(struct OcTreeNode* node, struct EleFace* ele);
-
-void insertChainEle(struct EleChain** head, struct EleFace* ele);
-
-void deleteEle(struct OcTreeNode* node, struct EleFace* ele);
-
-void splitNode(struct OcTreeNode* node);
-
-void combineNode(struct OcTreeNode* node);
-
-void queryEles(struct OcTreeNode* node, struct Region region);
-
-void initRegion(struct Region *region, double x, double y, double z, double length);
-
-struct OcTreeNode *createChildNode(struct OcTreeNode *node, double x, double y, double z, double length);
 #endif

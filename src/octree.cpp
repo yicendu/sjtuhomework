@@ -1,36 +1,74 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <algorithm>
+#include <iterator>
 #include "octree.h"
 
-/**
- * insertEle
- * 1.Check if it's splitted, For those splitted node,
- *   choose the appropriate child node.
- * 2.Check if the leaf node is overloaded. If overloaded,
- *   split the node and insert the eles to the child nodes.
- * 3.Directly add into the unoverloaded node.
- *
- * @param ptr node
- * @param ptr ele
- */
-void insertEle(struct OcTreeNode *node, struct EleFace *ele) {
-	if (1 == node->is_leaf) {
-		if (node->ele_num + 1 > MAX_ELE_NUM && node->region.length > node->min_length) {
-			splitNode(node);
-			insertEle(node, ele);
+
+
+
+Octree::Octree(int depth, Region region, double min_length, int max_ele_num)
+{
+	m_depth = depth;
+	m_region = region;
+	m_min_length = min_length;
+	m_is_leaf = true;
+	memset(m_sub_node, NULL, sizeof(m_sub_node));
+	m_max_ele_num = max_ele_num;
+}
+
+
+Octree::~Octree()
+{
+}
+
+void Octree::splitNode()
+{
+	m_is_leaf = false;
+
+	double child_lenght = m_region.length / 2;
+	double x[2] = { m_region.x, m_region.x + child_lenght };
+	double y[2] = { m_region.y, m_region.y + child_lenght };
+	double z[2] = { m_region.z, m_region.z + child_lenght };
+
+	int child_depth = m_depth + 1;
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			for (int k = 0; k < 2; k++) {
+				m_sub_node[4 * i + 2 * j + k] = new Octree(
+					child_depth,
+					Region{ x[i], y[j], z[k], child_lenght },
+					m_min_length,
+					m_max_ele_num);
+			}
+		}
+	}
+
+	std::set<EleFace*>::iterator it;
+	for (it = m_eles.begin(); it != m_eles.end(); it++) {
+		insertEle(*it);
+	}
+	m_eles.clear();
+}
+
+void Octree::insertEle(EleFace* ele)
+{
+	if (m_is_leaf) {
+		if (m_eles.size() + 1 > m_max_ele_num && m_region.length > m_min_length) {
+			splitNode();
+			insertEle(ele);
 		}
 		else {
-			insertChainEle(&node->ele_head, ele);
-			node->ele_num++;
+			m_eles.insert(ele);
 		}
-
 		return;
 	}
 
-	double mid_x = node->region.x + node->region.length / 2;
-	double mid_y = node->region.y + node->region.length / 2;
-	double mid_z = node->region.z + node->region.length / 2;
+	double child_lenght = m_region.length / 2;
+	double mid_x = m_region.x + child_lenght;
+	double mid_y = m_region.y + child_lenght;
+	double mid_z = m_region.z + child_lenght;
 	double x1 = ele->region_x;
 	double x2 = x1 + ele->region_length / 2;
 	double y1 = ele->region_y;
@@ -41,140 +79,50 @@ void insertEle(struct OcTreeNode *node, struct EleFace *ele) {
 	if (x1 < mid_x) {
 		if (y1 < mid_y) {
 			if (z1 < mid_z) {
-				insertEle(node->x1y1z1, ele);
+				m_sub_node[0]->insertEle(ele);
 			}
 			if (z2 > mid_z) {
-				insertEle(node->x1y1z2, ele);
+				m_sub_node[1]->insertEle(ele);
+			}
+			if (y2 > mid_y) {
+				if (z1 < mid_z) {
+					m_sub_node[2]->insertEle(ele);
+				}
+				if (z2 > mid_z) {
+					m_sub_node[3]->insertEle(ele);
+				}
 			}
 		}
-		if (y2 > mid_y) {
-			if (z1 < mid_z) {
-				insertEle(node->x1y2z1, ele);
+		if (x2 > mid_x) {
+			if (y1 < mid_y) {
+				if (z1 < mid_z) {
+					m_sub_node[4]->insertEle(ele);
+				}
+				if (z2 > mid_z) {
+					m_sub_node[5]->insertEle(ele);
+				}
 			}
-			if (z2 > mid_z) {
-				insertEle(node->x1y2z2, ele);
+			if (y2 > mid_y) {
+				if (z1 < mid_z) {
+					m_sub_node[6]->insertEle(ele);
+				}
+				if (z2 > mid_z) {
+					m_sub_node[7]->insertEle(ele);
+				}
 			}
 		}
 	}
-	if (x2 > mid_x) {
-		if (y1 < mid_y) {
-			if (z1 < mid_z) {
-				insertEle(node->x2y1z1, ele);
-			}
-			if (z2 > mid_z) {
-				insertEle(node->x2y1z2, ele);
-			}
-		}
-		if (y2 > mid_y) {
-			if (z1 < mid_z) {
-				insertEle(node->x2y2z1, ele);
-			}
-			if (z2 > mid_z) {
-				insertEle(node->x2y2z2, ele);
-			}
-		}
-	}
 }
 
-
-void insertChainEle(struct EleChain** head, struct EleFace* ele) {
-	if (*head == NULL) {
-		*head = (struct EleChain*) malloc(sizeof(struct EleChain));
-		(*head)->data = ele;
-		(*head)->front = NULL;
-		(*head)->rear = NULL;
-		return;
-	}
-	struct EleChain* head_temp = *head;
-	while (head_temp->rear) head_temp = head_temp->rear;
-	head_temp->rear = (struct EleChain*) malloc(sizeof(struct EleChain));
-	head_temp->rear->front = head_temp;
-	head_temp->rear->data = ele;
-	head_temp->rear->rear = NULL;
-}
-
-/**
- * splitNode
- * 1.Access the depth and region of the parent node.
- * 2.Fork into 8 child nodes.
- *
- * @param ptr node
- */
-void splitNode(struct OcTreeNode *node) {
-	double child_lenght = node->region.length / 2;
-	double mid_x = node->region.x + child_lenght;
-	double mid_y = node->region.y + child_lenght;
-	double mid_z = node->region.z + child_lenght;
-
-	node->is_leaf = 0;
-	node->x1y1z1 = createChildNode(node, node->region.x, node->region.y, node->region.z, child_lenght);
-	node->x1y1z2 = createChildNode(node, node->region.x, node->region.y, mid_z, child_lenght);
-	node->x1y2z1 = createChildNode(node, node->region.x, mid_y, node->region.z, child_lenght);
-	node->x1y2z2 = createChildNode(node, node->region.x, mid_y, mid_z, child_lenght);
-	node->x2y1z1 = createChildNode(node, mid_x, node->region.y, node->region.z, child_lenght);
-	node->x2y1z2 = createChildNode(node, mid_x, node->region.y, mid_z, child_lenght);
-	node->x2y2z1 = createChildNode(node, mid_x, mid_y, node->region.z, child_lenght);
-	node->x2y2z2 = createChildNode(node, mid_x, mid_y, mid_z, child_lenght);
-
-	while (node->ele_head) {
-		insertEle(node, node->ele_head->data);
-		if (node->ele_head->rear) {
-			node->ele_head = node->ele_head->rear;
-			free(node->ele_head->front);
-			node->ele_head->front = NULL;
-		}
-		else {
-			free(node->ele_head);
-			node->ele_head = NULL;
-		}
-	}
-	node->ele_num = 0;
-}
-
-struct OcTreeNode *createChildNode(struct OcTreeNode *node, double x, double y, double z, double length) {
-	int depth = node->depth + 1;
-	struct OcTreeNode *childNode = (struct OcTreeNode *) malloc(sizeof(struct OcTreeNode));
-	struct Region *region = (struct Region *) malloc(sizeof(struct Region));
-	initRegion(region, x, y, z, length);
-	initNode(childNode, depth, *region, node->min_length);
-	childNode->min_length = node->min_length;
-	return childNode;
-}
-
-/**
- * deleteEle
- */
-void deleteEle(struct OcTreeNode *node, struct EleFace *ele) {
-
-}
-
-/**
- * combineNode
- */
-void combineNode(struct OcTreeNode *node) {
-
-}
-
-void queryEles(struct OcTreeNode* node, struct Region region) {
-	if (node->is_leaf == 1) {
-		printf("There are %d faces. i.e.\n", node->ele_num);
-		
-		struct EleChain* head = node->ele_head;
-		for (int j = 0; j < node->ele_num; j++) {
-			printf("Face index%d\n", j);
-			printf("Vertex1:%f,%f,%f\n", head->data->vertex0->x_value, head->data->vertex0->y_value, head->data->vertex0->z_value);
-			printf("Vertex2:%f,%f,%f\n", head->data->vertex1->x_value, head->data->vertex1->y_value, head->data->vertex1->z_value);
-			printf("Vertex3:%f,%f,%f\n", head->data->vertex2->x_value, head->data->vertex2->y_value, head->data->vertex2->z_value);
-			head = head->rear;
-		}
-		
-		return;
+std::set<EleFace*> Octree::queryEles(Region region) {
+	if (m_is_leaf) {
+		return m_eles;
 	}
 
-	double child_lenght = node->region.length / 2;
-	double mid_x = node->region.x + child_lenght;
-	double mid_y = node->region.y + child_lenght;
-	double mid_z = node->region.z + child_lenght;
+	double child_lenght = m_region.length / 2;
+	double mid_x = m_region.x + child_lenght;
+	double mid_y = m_region.y + child_lenght;
+	double mid_z = m_region.z + child_lenght;
 	double x1 = region.x;
 	double x2 = x1 + region.length;
 	double y1 = region.y;
@@ -182,57 +130,48 @@ void queryEles(struct OcTreeNode* node, struct Region region) {
 	double z1 = region.z;
 	double z2 = z1 + region.length;
 
+	std::set<EleFace*> eles;
+	std::set<EleFace*> ele[8];
 	if (x1 < mid_x) {
 		if (y1 < mid_y) {
 			if (z1 < mid_z) {
-				queryEles(node->x1y1z1, region);
+				ele[0] = m_sub_node[0]->queryEles(region);
 			}
 			if (z2 > mid_z) {
-				queryEles(node->x1y1z2, region);
+				ele[1] = m_sub_node[1]->queryEles(region);
 			}
 		}
 		if (y2 > mid_y) {
 			if (z1 < mid_z) {
-				queryEles(node->x1y2z1, region);
+				ele[2] = m_sub_node[2]->queryEles(region);
 			}
 			if (z2 > mid_z) {
-				queryEles(node->x1y2z2, region);
+				ele[3] = m_sub_node[3]->queryEles(region);
 			}
 		}
 	}
 	if (x2 > mid_x) {
 		if (y1 < mid_y) {
 			if (z1 < mid_z) {
-				queryEles(node->x2y1z1, region);
+				ele[4] = m_sub_node[4]->queryEles(region);
 			}
 			if (z2 > mid_z) {
-				queryEles(node->x2y1z2, region);
+				ele[5] = m_sub_node[5]->queryEles(region);
 			}
 		}
 		if (y2 > mid_y) {
 			if (z1 < mid_z) {
-				queryEles(node->x2y2z1, region);
+				ele[6] = m_sub_node[6]->queryEles(region);
 			}
 			if (z2 > mid_z) {
-				queryEles(node->x2y2z2, region);
+				ele[7] = m_sub_node[7]->queryEles(region);
 			}
 		}
 	}
-
-}
-
-void initNode(struct OcTreeNode *node, int depth, struct Region region, double min_length) {
-	node->depth = depth;
-	node->is_leaf = 1;
-	node->ele_num = 0;
-	node->region = region;
-	node->min_length = min_length;
-	node->ele_head = NULL;
-}
-
-void initRegion(struct Region *region, double x, double y, double z, double length) {
-	region->x = x;
-	region->y = y;
-	region->z = z;
-	region->length = length;
+	std::set<EleFace*> temp;
+	for (int i = 0; i < 8; i++) {
+		std::set_union(ele[i].begin(), ele[i].end(), eles.begin(), eles.end(), std::inserter(temp,temp.begin()));
+		eles = temp;
+	}
+	return eles;
 }

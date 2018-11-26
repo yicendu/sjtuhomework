@@ -7,23 +7,21 @@
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
-struct EleFace ele[100000];
-struct Vertex vertex[300000];
+struct EleFace ele[1000000];
+struct Vertex vertex[3000000];
 
 int main()
 {
     std::cout << "Hello World!\n"; 
-	struct OcTreeNode root;
-	struct Region root_region;
+	Region root_region = {0,0,0,180};
 
-	initRegion(&root_region, 0, 0, 0, 180);
-	initNode(&root, 1, root_region, 0.5);
+	Octree root(0, root_region, 0.5, 5);
 
 	float x_length;
 	float y_length;
 	float z_length;
 	srand((int)time(NULL));
-	for (int i = 0; i < 100000; i++) {
+	for (int i = 0; i < 1000000; i++) {
 		double mid_x = (double)(rand() % 180 + (double)(rand() % 1000) / 1000);
 		double mid_y = (double)(rand() % 180 + (double)(rand() % 1000) / 1000);
 		double mid_z = (double)(rand() % 180 + (double)(rand() % 1000) / 1000);
@@ -47,7 +45,7 @@ int main()
 		z_length = max(max(vertex[0 + 3 * i].z_value, vertex[1 + 3 * i].z_value), vertex[2 + 3 * i].z_value) - ele[i].region_z;
 
 		ele[i].region_length = max(max(x_length, y_length), z_length);
-		insertEle(&root, ele+i);
+		root.insertEle(ele+i);
 	}
 
 	struct Region test;
@@ -55,7 +53,14 @@ int main()
 	test.y = 0;
 	test.z = 0;
 	test.length = 1;
-	queryEles(&root, test);
+	std::set<EleFace*> eles = root.queryEles(test);
+	std::set<EleFace*>::iterator ele;
+	for (ele = eles.begin(); ele != eles.end(); ele++) {
+		EleFace* face = *ele;
+		std::cout << face->vertex0->x_value << " " << face->vertex0->y_value << " " << face->vertex0->x_value << "\n";
+		std::cout << face->vertex1->x_value << " " << face->vertex1->y_value << " " << face->vertex1->x_value << "\n";
+		std::cout << face->vertex2->x_value << " " << face->vertex2->y_value << " " << face->vertex2->x_value << "\n";
+	}
 
 }
 
