@@ -49,6 +49,9 @@
     <ClCompile Include="octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stlreading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
@@ -73,6 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="octree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stlreading.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

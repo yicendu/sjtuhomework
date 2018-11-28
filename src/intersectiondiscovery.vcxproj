@@ -186,6 +186,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="octree.cpp" />
+    <ClCompile Include="stlreading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
@@ -210,6 +211,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="octree.h" />
+    <ClInclude Include="stlreading.h" />
     <ClInclude Include="ui_mainwindow.h" />
   </ItemGroup>
   <ItemGroup>
