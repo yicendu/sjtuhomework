@@ -8,6 +8,7 @@
 
 
 
+
 Octree::Octree(int depth, Region region, double min_length, int max_ele_num)
 {
 	m_depth = depth;

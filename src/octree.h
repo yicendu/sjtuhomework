@@ -5,6 +5,7 @@
 #define NULL 0
 
 #include <set>
+#include "vector3.h"
 //octree is a cubic tree. Each length of its eages is the same.
 struct Region {
 	double x;//x
@@ -23,6 +24,7 @@ struct EleFace {
 	struct Vertex* vertex0;
 	struct Vertex* vertex1;
 	struct Vertex* vertex2;
+	Vector3d* normal;
 	double region_x;//x
 	double region_y;
 	double region_z;
