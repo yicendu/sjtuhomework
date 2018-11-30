@@ -333,6 +333,6 @@ void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vertex*>> &line_se
 			}
 		}
 	}
-	if (find_answer = true) {line_section.push_back(point);}
+	if (find_answer == true) {line_section.push_back(point);}
 	return;
 }
