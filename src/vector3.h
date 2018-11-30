@@ -94,7 +94,10 @@ public:
 	C L1Norm() const { return fabs(v[0]) + fabs(v[1]) + fabs(v[2]);}
 	C L2Norm() const { return sqrt(Dot(*this));}
 	C Distance(const Vector3<C> & r) const { return (*this-r).L2Norm();} 
-
+	bool Iszero() {
+		if (v[0] == 0 && v[1] == 0 && v[2] == 0) { return true; }
+		else { return false; }
+	}
 
 
 	// min, max functions
