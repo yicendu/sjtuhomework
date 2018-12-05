@@ -145,4 +145,3 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 	}
 	return eles;
 }
-

@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tree_test", "..\tools\Tree_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_stl_reading", "..\tools\stl_reading_test\stl_reading.vcxproj", "{430BB5CB-3B76-457C-B4AA-F2B1C77B40AA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "face_intersection_test", "..\tools\face_intersection_test\face_intersection_test.vcxproj", "{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +41,14 @@ Global
 		{430BB5CB-3B76-457C-B4AA-F2B1C77B40AA}.Release|x64.Build.0 = Release|x64
 		{430BB5CB-3B76-457C-B4AA-F2B1C77B40AA}.Release|x86.ActiveCfg = Release|Win32
 		{430BB5CB-3B76-457C-B4AA-F2B1C77B40AA}.Release|x86.Build.0 = Release|Win32
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Debug|x64.ActiveCfg = Debug|x64
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Debug|x64.Build.0 = Debug|x64
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Debug|x86.ActiveCfg = Debug|Win32
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Debug|x86.Build.0 = Debug|Win32
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Release|x64.ActiveCfg = Release|x64
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Release|x64.Build.0 = Release|x64
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Release|x86.ActiveCfg = Release|Win32
+		{1CFA67FF-3CBD-4363-A73A-6BFCFF4155FE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
