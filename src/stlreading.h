@@ -51,6 +51,7 @@ public:
 	std::vector<Vector3d> vertices;
 	std::unordered_map<Vector3d, int> indexMap;
 	std::vector<EleFace> faces;
+	std::vector<vector<Vector3d*>> intersection;//set of the intersect segment,each intersect segment has two vertices
 
 	int getVector(Vector3d v) {
 		if (indexMap.count(v)) {
