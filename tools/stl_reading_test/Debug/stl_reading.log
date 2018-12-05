@@ -1,0 +1,75 @@
+﻿  stlreading.cpp
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “x”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “y”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “z”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+d:\mygit\sjtuhomework\src\stlreading.cpp(65): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(66): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(67): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(68): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(69): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(70): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(82): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(83): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(84): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(85): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(86): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(87): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+  stl_reading_Test.cpp
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “x”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “y”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+d:\mygit\sjtuhomework\src\stlreading.h(24): error C2039: “z”: 不是“Vector3<double>”的成员
+  d:\mygit\sjtuhomework\src\vector3.h(19): note: 参见“Vector3<double>”的声明
+  正在生成代码...

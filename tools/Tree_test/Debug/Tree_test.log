@@ -1,0 +1,355 @@
+﻿  octree.cpp
+d:\mygit\sjtuhomework\src\stlreading.h(24): warning C4244: “参数”: 从“const C”转换到“const float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(26): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(27): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(28): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(32): warning C4018: “<”: 有符号/无符号不匹配
+d:\mygit\sjtuhomework\src\octree.cpp(33): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(34): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(35): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(36): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(37): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(38): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\octree.cpp(49): warning C4018: “<”: 有符号/无符号不匹配
+d:\mygit\sjtuhomework\src\octree.cpp(102): warning C4018: “>”: 有符号/无符号不匹配
+c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): error C2678: 二进制“==”: 没有找到接受“const _Ty”类型的左操作数的运算符(或没有可接受的转换)
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(284): note: 可能是“bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(278): note: 或    “bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(272): note: 或    “bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(266): note: 或    “bool std::operator ==(const std::error_code &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(331): note: 或    “bool std::operator ==(const std::exception_ptr &,std::nullptr_t) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(326): note: 或    “bool std::operator ==(std::nullptr_t,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(321): note: 或    “bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): note: 尝试匹配参数列表“(const _Ty, const _Ty)”时
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(98): note: 编译 类 模板 成员函数 "bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const" 时
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(118): note: 参见对正在编译的函数 模板 实例化“bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const”的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 参见对正在编译的 类 模板 实例化 "std::equal_to<_Kty>" 的引用
+          with
+          [
+              _Kty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 查看指向正在编译的变量模板“const bool is_empty_v<std::equal_to<Vector3<double> > >”的引用
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(29): note: 参见对正在编译的 类 模板 实例化 "std::_Uhash_compare<_Kty,_Hasher,_Keyeq>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(159): note: 参见对正在编译的 类 模板 实例化 "std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(97): note: 参见对正在编译的 类 模板 实例化 "std::_Hash<std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  d:\mygit\sjtuhomework\src\stlreading.h(52): note: 参见对正在编译的 类 模板 实例化 "std::unordered_map<Vector3d,int,std::hash<Vector3d>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int
+          ]
+  stlreading.cpp
+d:\mygit\sjtuhomework\src\stlreading.h(24): warning C4244: “参数”: 从“const C”转换到“const float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(65): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(66): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(67): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(68): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(69): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(70): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(82): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(83): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(84): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(85): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(86): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\src\stlreading.cpp(87): warning C4244: “初始化”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): error C2678: 二进制“==”: 没有找到接受“const _Ty”类型的左操作数的运算符(或没有可接受的转换)
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(284): note: 可能是“bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(278): note: 或    “bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(272): note: 或    “bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(266): note: 或    “bool std::operator ==(const std::error_code &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(331): note: 或    “bool std::operator ==(const std::exception_ptr &,std::nullptr_t) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(326): note: 或    “bool std::operator ==(std::nullptr_t,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(321): note: 或    “bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): note: 尝试匹配参数列表“(const _Ty, const _Ty)”时
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(98): note: 编译 类 模板 成员函数 "bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const" 时
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(118): note: 参见对正在编译的函数 模板 实例化“bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const”的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 参见对正在编译的 类 模板 实例化 "std::equal_to<_Kty>" 的引用
+          with
+          [
+              _Kty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 查看指向正在编译的变量模板“const bool is_empty_v<std::equal_to<Vector3<double> > >”的引用
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(29): note: 参见对正在编译的 类 模板 实例化 "std::_Uhash_compare<_Kty,_Hasher,_Keyeq>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(159): note: 参见对正在编译的 类 模板 实例化 "std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(97): note: 参见对正在编译的 类 模板 实例化 "std::_Hash<std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  d:\mygit\sjtuhomework\src\stlreading.h(52): note: 参见对正在编译的 类 模板 实例化 "std::unordered_map<Vector3d,int,std::hash<Vector3d>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int
+          ]
+  Tree_test.cpp
+d:\mygit\sjtuhomework\src\stlreading.h(24): warning C4244: “参数”: 从“const C”转换到“const float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(40): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(41): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(42): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(44): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(45): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+d:\mygit\sjtuhomework\tools\tree_test\tree_test.cpp(46): warning C4244: “=”: 从“C”转换到“float”，可能丢失数据
+          with
+          [
+              C=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): error C2678: 二进制“==”: 没有找到接受“const _Ty”类型的左操作数的运算符(或没有可接受的转换)
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(284): note: 可能是“bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(278): note: 或    “bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(272): note: 或    “bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\system_error(266): note: 或    “bool std::operator ==(const std::error_code &,const std::error_code &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(331): note: 或    “bool std::operator ==(const std::exception_ptr &,std::nullptr_t) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(326): note: 或    “bool std::operator ==(std::nullptr_t,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\exception(321): note: 或    “bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) noexcept”
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(99): note: 尝试匹配参数列表“(const _Ty, const _Ty)”时
+          with
+          [
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xstddef(98): note: 编译 类 模板 成员函数 "bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const" 时
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(118): note: 参见对正在编译的函数 模板 实例化“bool std::equal_to<_Kty>::operator ()(const _Ty &,const _Ty &) const”的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 参见对正在编译的 类 模板 实例化 "std::equal_to<_Kty>" 的引用
+          with
+          [
+              _Kty=Vector3d
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xutility(264): note: 查看指向正在编译的变量模板“const bool is_empty_v<std::equal_to<Vector3<double> > >”的引用
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(29): note: 参见对正在编译的 类 模板 实例化 "std::_Uhash_compare<_Kty,_Hasher,_Keyeq>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xhash(159): note: 参见对正在编译的 类 模板 实例化 "std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\unordered_map(97): note: 参见对正在编译的 类 模板 实例化 "std::_Hash<std::_Umap_traits<_Kty,_Ty,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int,
+              _Hasher=std::hash<Vector3d>,
+              _Keyeq=std::equal_to<Vector3d>,
+              _Alloc=std::allocator<std::pair<const Vector3d,int>>
+          ]
+  d:\mygit\sjtuhomework\src\stlreading.h(52): note: 参见对正在编译的 类 模板 实例化 "std::unordered_map<Vector3d,int,std::hash<Vector3d>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>" 的引用
+          with
+          [
+              _Kty=Vector3d,
+              _Ty=int
+          ]
+  正在生成代码...

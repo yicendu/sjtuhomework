@@ -9,3 +9,9 @@
 /src/x64/Release
 /src/release
 /bin
+/treetest/x64/Debug
+/.vs/intersectiondiscovery/v15
+/tools/Tree_test/.vs/Tree_test/v15
+/tools/Tree_test/x64/Debug/Tree_test.tlog
+/tools/Tree_test/x64
+/tools/stl_reading_test/x64
