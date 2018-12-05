@@ -53,6 +53,8 @@ public:
 	std::vector<EleFace> faces;
 	std::vector<vector<Vector3d*>> intersection;//set of the intersect segment,each intersect segment has two vertices
 
+	void cal_int(EleFace *t1, EleFace *t2);
+
 	int getVector(Vector3d v) {
 		if (indexMap.count(v)) {
 			return indexMap.at(v);

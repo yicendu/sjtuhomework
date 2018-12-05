@@ -1,0 +1,6 @@
+﻿  cal_intersection.cpp
+  intersection_test.cpp
+d:\mygit\sjtuhomework\tools\intersection_test\intersection_test\intersection_test\intersection_test.cpp(9): warning C4326: “main”的返回类型应为“int”而非“void”
+  正在生成代码...
+d:\mygit\sjtuhomework\src\cal_intersection.cpp(172): warning C4715: “cal_intersect_point_collinear”: 不是所有的控件路径都返回值
+  intersection_test.vcxproj -> D:\mygit\sjtuhomework\tools\intersection_test\intersection_test\Debug\intersection_test.exe

@@ -259,6 +259,7 @@ bool calculate_intersect_point_colplanar(Vector3d p1, Vector3d p2, EleFace *tria
 }
 
 
+
 /*
 calculate intersection segment line of t1 and t2;
 t1,t2 are two input triangles;
@@ -350,4 +351,8 @@ void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vector3d*>> &line_
 	}
 	if (find_answer) {line_section.push_back(point);}
 	return;
+}
+
+void StlFile::cal_int(EleFace *t1, EleFace *t2) {
+	cal_intersection(t1, t2, intersection);
 }
