@@ -22,9 +22,9 @@ int main()
 	Vector3f c_v3(0, 0, 1);
 	EleFace c(c_normal, c_v1, c_v2, c_v3);
 
-	vector<vector<Vector3f*>> ans;
+	vector<Vector3f*> ans;
 	cal_intersection(&a, &c, ans);
-	cout << *ans[0][0] << endl << *ans[0][1] << endl;
+	cout << *ans[0] << endl <<* ans[1];
 
 	return 0;
 }

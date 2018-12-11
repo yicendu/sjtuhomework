@@ -24,6 +24,9 @@
     <ClInclude Include="..\..\src\vector3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\faceintersect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\octree.cpp">
@@ -33,6 +36,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="find_might_intersected_faces_test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\faceintersect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

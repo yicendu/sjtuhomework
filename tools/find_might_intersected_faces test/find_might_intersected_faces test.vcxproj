@@ -117,11 +117,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\faceintersect.h" />
     <ClInclude Include="..\..\src\octree.h" />
     <ClInclude Include="..\..\src\stlreading.h" />
     <ClInclude Include="..\..\src\vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\faceintersect.cpp" />
     <ClCompile Include="..\..\src\octree.cpp" />
     <ClCompile Include="..\..\src\stlreading.cpp" />
     <ClCompile Include="find_might_intersected_faces_test.cpp" />

@@ -5,6 +5,7 @@
 
 #include <set>
 #include "stlreading.h"
+#include "faceintersect.h"
 //octree is a cubic tree. Each length of its eages is the same.
 
 class Octree
@@ -58,7 +59,9 @@ class might_intersected_faces_list
 public:
 	std::vector<might_intersected_faces*> m_i_f_list;
 	might_intersected_faces_list(Octree *nodeA, Octree *nodeB);
+	std::vector<vector<Vector3f*>> intersectLine_list;
 
 private:
 	bool getMightIntersectedFaces(Octree *nodeA);
+	bool fillIintersectLineList();
 };
