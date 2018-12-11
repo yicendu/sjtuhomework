@@ -16,3 +16,5 @@
 /tools/Tree_test/x64
 /tools/stl_reading_test/x64
 /tools/face_intersection_test/x64/Debug
+/tools/find_might_intersected_faces test/x64/Debug
+/.vs/sjtuhomework/v15/ipch/AutoPCH

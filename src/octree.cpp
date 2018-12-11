@@ -145,3 +145,78 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 	}
 	return eles;
 }
+
+bool Octree::findIntersectedNode(Octree *nodeB)
+{
+	if (!isIntersected(this->m_region, nodeB->m_region))
+		return false;
+	else
+		m_intersected_node.push_back(nodeB);
+
+	if (m_is_leaf && nodeB->m_is_leaf)
+		return true;
+
+	if (m_is_leaf && !nodeB->m_is_leaf)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			findIntersectedNode(nodeB->m_sub_node[j]);
+		}
+	}
+
+	if (!m_is_leaf && nodeB->m_is_leaf)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			m_sub_node[i]->findIntersectedNode(nodeB);
+		}
+	}
+
+	if (!m_is_leaf && !nodeB->m_is_leaf)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				m_sub_node[i]->findIntersectedNode(nodeB->m_sub_node[j]);
+			}
+		}
+	}
+}
+
+
+might_intersected_faces_list::might_intersected_faces_list(Octree *nodeA, Octree *nodeB)
+{
+	nodeA->findIntersectedNode(nodeB);
+	getMightIntersectedFaces(nodeA);
+}
+
+bool might_intersected_faces_list::getMightIntersectedFaces(Octree *nodeA)
+{
+
+	if (nodeA->isLeaf())
+	{
+		if (nodeA->getEles().empty())
+		{
+			return false;
+		}
+		might_intersected_faces *tmp = new might_intersected_faces();
+		tmp->a_eles = nodeA->getEles();
+		size_t i = 0;
+		for (i = 0; i < nodeA->m_intersected_node.size(); i++)
+		{
+			if (nodeA->m_intersected_node[i]->isLeaf())
+			{
+				std::set<EleFace*> tmp_b_eles = nodeA->m_intersected_node[i]->getEles();
+				tmp->b_eles.insert(tmp_b_eles.begin(), tmp_b_eles.end());
+			}
+		}
+		m_i_f_list.push_back(tmp);
+		return true;
+	}
+	else
+	{
+		for (int i = 0; i < 8; i++)
+			getMightIntersectedFaces(nodeA->getSubNodes(i));
+	}
+}
