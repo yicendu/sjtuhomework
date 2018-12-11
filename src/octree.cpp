@@ -140,7 +140,7 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 
 	std::set<EleFace*> temp;
 	for (int i = 0; i < 8; i++) {
-		std::set_union(ele[i].begin(), ele[i].end(), eles.begin(), eles.end(), std::inserter(temp,temp.begin()));
+		std::set_union(ele[i].begin(), ele[i].end(), eles.begin(), eles.end(), std::inserter(temp, temp.begin()));
 		eles = temp;
 	}
 	return eles;
@@ -189,6 +189,7 @@ might_intersected_faces_list::might_intersected_faces_list(Octree *nodeA, Octree
 {
 	nodeA->findIntersectedNode(nodeB);
 	getMightIntersectedFaces(nodeA);
+	fillIintersectLineList();
 }
 
 bool might_intersected_faces_list::getMightIntersectedFaces(Octree *nodeA)
@@ -219,4 +220,27 @@ bool might_intersected_faces_list::getMightIntersectedFaces(Octree *nodeA)
 		for (int i = 0; i < 8; i++)
 			getMightIntersectedFaces(nodeA->getSubNodes(i));
 	}
+}
+
+bool might_intersected_faces_list::fillIintersectLineList()
+{
+	size_t i = 0;
+	for (i = 0; i < m_i_f_list.size(); i++)
+	{
+		/*auto j = m_i_f_list[i]->a_eles.begin();*/
+		for (auto j = m_i_f_list[i]->a_eles.begin(); j != m_i_f_list[i]->a_eles.end(); j++)
+		{
+			/*size_t k = 0;*/
+			for (auto k = m_i_f_list[i]->b_eles.begin(); k != m_i_f_list[i]->b_eles.end(); k++)
+			{
+				std::vector<Vector3f*> tmpLine;
+				if (cal_intersection(*j, *k, tmpLine))
+				intersectLine_list.push_back(tmpLine);
+			}
+		}
+	}
+	if (intersectLine_list.empty())
+		return false;
+	else
+		return true;
 }

@@ -265,10 +265,10 @@ calculate intersection segment line of t1 and t2;
 t1,t2 are two input triangles;
 line_section is the vector storing the two point of the intersection segment line of t1 and t2;
 */
-void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vector3f*>> &line_section) {
+bool cal_intersection(EleFace *t1, EleFace *t2,vector<Vector3f*> &point) {
 
 	//coplanor1r
-	if ((t1->normal.Cross(t2->normal)).L2Norm() == 0) { return; }
+	if ((t1->normal.Cross(t2->normal)).L2Norm() == 0) { return false; }
 
 	Vector3f va1 = t1->vertex0;
 	Vector3f vb1 = t1->vertex1;
@@ -292,11 +292,11 @@ void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vector3f*>> &line_
 	//judge whether each edge of t1 is at same side of t2
 	int is_sd[6];
 	for (int i = 0; i < 3; i++) { is_sd[i] = is_same_side(edgeset1[i], edgeset1[i + 1], t2); }
-	if (is_sd[0] == 0 && is_sd[1] == 0 && is_sd[2] == 0) { return; }//three edges is at the same side,don't intersect with t2
+	if (is_sd[0] == 0 && is_sd[1] == 0 && is_sd[2] == 0) { return false; }//three edges is at the same side,don't intersect with t2
 
 	//judge whether each edge of t2 is at same side of t1
 	for (int i = 0; i < 3; i++) { is_sd[i + 3] = is_same_side(edgeset2[i], edgeset2[i + 1], t1); }
-	if (is_sd[3] == 0 && is_sd[4] == 0 && is_sd[5] == 0) { return; }
+	if (is_sd[3] == 0 && is_sd[4] == 0 && is_sd[5] == 0) { return false; }
 
 	//judge each edge of t1 intersect with t2
 	int is_int[6];
@@ -308,13 +308,13 @@ void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vector3f*>> &line_
 			else { is_int[i] = is_intersection(edgeset2[i - 3], edgeset2[i + 1 - 3], t1); }//t2 edge
 		}
 	}
-	if (is_int[0] == 0 && is_int[1] == 0 && is_int[2] == 0 && is_int[3] == 0 && is_int[4] == 0 && is_int[5] == 0) { return; }//three edges don't intersect with t2
+	if (is_int[0] == 0 && is_int[1] == 0 && is_int[2] == 0 && is_int[3] == 0 && is_int[4] == 0 && is_int[5] == 0) { return false; }//three edges don't intersect with t2
 
 	
 
 	/*calculate the intersect point*/
 
-	vector<Vector3f*> point;
+	//vector<Vector3f*> point;
 	bool find_answer = false;
 
 	for (int i = 0; i < 6; i++) {
@@ -349,6 +349,9 @@ void cal_intersection(EleFace *t1, EleFace *t2, vector<vector<Vector3f*>> &line_
 
 		
 	}
-	if (find_answer) {line_section.push_back(point);}
-	return;
+	if (find_answer) { 
+
+		return true; 
+	}
+	
 }
