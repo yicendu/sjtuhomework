@@ -3,24 +3,15 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include "Vector3.h"
 
 #define NULL 0
 
-class Vector3D {
-public:
-	float x;
-	float y;
-	float z;
 
-public:
-	bool operator==(const Vector3D& other) const {
-		return other.x == x && other.y == y && other.z == z;
-	}
-};
 
 class Region {
 public:
-	float x;//x
+	float x;
 	float y;
 	float z;
 	float length;
@@ -28,9 +19,9 @@ public:
 
 
 namespace std {
-	template <> struct hash<Vector3D> {
-		std::size_t operator()(const Vector3D& v) const {
-			return ((hash<float>()(v.x) ^ (hash<float>()(v.y) << 1)) >> 1) ^ (hash<float>()(v.z) << 1);
+	template <> struct hash<Vector3f> {
+		std::size_t operator()(const Vector3f& v) const {
+			return ((hash<double>()(v.x) ^ (hash<double>()(v.y) << 1)) >> 1) ^ (hash<double>()(v.z) << 1);
 		}
 	};
 }
@@ -38,16 +29,16 @@ namespace std {
 
 class EleFace {
 public:
-	EleFace(Vector3D normal, Vector3D vertex0, Vector3D vertex1, Vector3D vertex2);
+	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2);
 	// I am not sure whether we need the index of the vertexes in the stl instance.
-	EleFace(Vector3D normal, Vector3D vertex0, Vector3D vertex1, Vector3D vertex2, int a, int b, int c);
+	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int a, int b, int c);
 	EleFace(){}
 
 public:
-	Vector3D normal;
-	Vector3D vertex0;
-	Vector3D vertex1;
-	Vector3D vertex2;
+	Vector3f normal;
+	Vector3f vertex0;
+	Vector3f vertex1;
+	Vector3f vertex2;
 	int a;
 	int b;
 	int c;
@@ -57,11 +48,11 @@ public:
 class StlFile {
 public:
 	std::string header;
-	std::vector<Vector3D> vertices;
-	std::unordered_map<Vector3D, int> indexMap;
+	std::vector<Vector3f> vertices;
+	std::unordered_map<Vector3f, int> indexMap;
 	std::vector<EleFace> faces;
 
-	int getVector(Vector3D v) {
+	int getVector(Vector3f v) {
 		if (indexMap.count(v)) {
 			return indexMap.at(v);
 		}

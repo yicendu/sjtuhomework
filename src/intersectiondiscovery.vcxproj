@@ -183,6 +183,7 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="faceintersect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="octree.cpp" />
@@ -194,6 +195,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include=".\intersectiondiscovery_plugin_import.cpp" />
+    <ClInclude Include="faceintersect.h" />
+    <ClInclude Include="vector3.h" />
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
