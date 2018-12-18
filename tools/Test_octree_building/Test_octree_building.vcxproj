@@ -154,11 +154,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\facepair.cpp" />
     <ClCompile Include="..\..\src\octree.cpp" />
     <ClCompile Include="..\..\src\stlloading.cpp" />
     <ClCompile Include="Test_octree_building.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\facepair.h" />
     <ClInclude Include="..\..\src\octree.h" />
     <ClInclude Include="..\..\src\stlloading.h" />
   </ItemGroup>

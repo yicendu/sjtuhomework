@@ -26,10 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\faceintersect.h">
+    <ClInclude Include="..\..\src\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\vector3.h">
+    <ClInclude Include="..\..\src\facepair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -65,4 +65,4 @@ public:
 	}
 };
 
-StlFile slt_read(char* name);
+StlFile slt_read(const char* name);

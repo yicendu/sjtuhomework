@@ -326,7 +326,7 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 		if (inters_status[i] == 1) {
 			if (i < 3) {
 				inters_status[i] = is_intersection(
-					edgevector1[i], edgevector1[i + 1], tria2);
+					edgevector1[i], edgevector1[(i + 1)%3], tria2);
 			}//tria1 edge
 			else {
 				inters_status[i] = is_intersection(
