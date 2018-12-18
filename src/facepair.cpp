@@ -326,7 +326,7 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 		if (inters_status[i] == 1) {
 			if (i < 3) {
 				inters_status[i] = is_intersection(
-					edgevector1[i], edgevector1[(i + 1)%3], tria2);
+					edgevector1[i%3], edgevector1[(i + 1)%3], tria2);
 			}//tria1 edge
 			else {
 				inters_status[i] = is_intersection(
@@ -348,7 +348,7 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 			if (i < 3) {
 				for (int j = 3; j < 6; j++) {
 					if (inters_status[j] == 2) {//two edge overlap
-						if (cal_intersect_point_collinear(edgevector1[i], edgevector1[i + 1], edgevector2[j - 3], edgevector2[j + 1 - 3], point)) {
+						if (cal_intersect_point_collinear(edgevector1[i%3], edgevector1[(i + 1)%3], edgevector2[(j - 3)%3], edgevector2[(j + 1 - 3)%3], point)) {
 							find_answer = true;
 						}
 					}
@@ -357,20 +357,20 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 				}
 			}
 			if (i < 3) {
-				if (calculate_intersect_point_colplanar(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector1[i%3], edgevector1[(i + 1)%3], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point_colplanar(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector2[(i - 3)%3], edgevector2[(i + 1 - 3)%3], tria1, point)) { find_answer = true; }
 			}
 		}
 		if (point.size() == 2) { break; }
 
 		if (inters_status[i] == 1) {
 			if (i < 3) {
-				if (calculate_intersect_point(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector1[i%3], edgevector1[(i + 1)%3], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector2[(i - 3)%3], edgevector2[(i + 1 - 3)%3], tria1, point)) { find_answer = true; }
 			}
 		}
 	}

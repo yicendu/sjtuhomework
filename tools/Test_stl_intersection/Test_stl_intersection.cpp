@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 	//	return 1;
 	//}
 
-	StlFile stl_1 = slt_read("C:\\Users\\30931\\source\\repos\\yicendu\\sjtuhomework\\tools\\rabbit.stl");
-	StlFile stl_2 = slt_read("C:\\Users\\30931\\source\\repos\\yicendu\\sjtuhomework\\tools\\yellowcat.stl");
+	StlFile stl_1 = slt_read("C:/Users/Dianxin/Desktop/workshop/software fundamental/project/sjtuhomework/tools/rabbit.stl");
+	StlFile stl_2 = slt_read("C:/Users/Dianxin/Desktop/workshop/software fundamental/project/sjtuhomework/tools/yellowcat.stl");
 	Octree root1(&stl_1, 5, 5);
 	Octree root2(&stl_2, 5, 5);
 
