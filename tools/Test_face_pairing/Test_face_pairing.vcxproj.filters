@@ -15,15 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stl_reading_Test.cpp">
+    <ClCompile Include="Test_face_pairing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\stlreading.cpp">
+    <ClCompile Include="..\..\src\stlloading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\facepair.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\stlreading.h">
+    <ClInclude Include="..\..\src\faceintersect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

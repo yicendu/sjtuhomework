@@ -16,6 +16,7 @@
     <Keyword>Qt4VSv1.0</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
+    <ProjectName>Main</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -183,11 +184,11 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="faceintersect.cpp" />
+    <ClCompile Include="facepair.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="octree.cpp" />
-    <ClCompile Include="stlreading.cpp" />
+    <ClCompile Include="stlloading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
@@ -195,7 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include=".\intersectiondiscovery_plugin_import.cpp" />
-    <ClInclude Include="faceintersect.h" />
+    <ClInclude Include="facepair.h" />
     <ClInclude Include="vector3.h" />
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <FileType>Document</FileType>
@@ -214,7 +215,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="octree.h" />
-    <ClInclude Include="stlreading.h" />
+    <ClInclude Include="stlloading.h" />
     <ClInclude Include="ui_mainwindow.h" />
   </ItemGroup>
   <ItemGroup>

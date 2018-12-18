@@ -49,10 +49,10 @@
     <ClCompile Include="octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stlreading.cpp">
+    <ClCompile Include="stlloading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="faceintersect.cpp">
+    <ClCompile Include="facepair.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,13 +81,13 @@
     <ClInclude Include="octree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stlreading.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="faceintersect.h">
+    <ClInclude Include="stlloading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="facepair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "stlreading.h"
-#include "faceintersect.h"
+#include "stlloading.h"
+#include "facepair.h"
 
 int main()
 {
