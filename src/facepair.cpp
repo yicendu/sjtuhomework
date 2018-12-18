@@ -1,77 +1,89 @@
-#include "stlreading.h"
+#include "stlloading.h"
 #include <iostream>
 #include "octree.h"
 #include "vector3.h"
 #include <vector>
 #include <algorithm>
+#define epsilon 1e-9
 
-//two vertex to vector3d
 Vector3f edge(Vector3f a, Vector3f b) {
-	Vector3f tmp;
-	tmp.x = b.x - a.x;
-	tmp.y = b.y - a.y;
-	tmp.z = b.z - a.z;
-	return tmp;
+	return Vector3f(b.x - a.x, b.y - a.y, b.z - a.z);
 }
 
-//copy vertex1's value to vertex2
-void v_assign(Vector3f v1, Vector3f v2) {
-	v2.x = v1.x;
-	v2.y = v1.y;
-	v2.z = v1.z;
-	return;
+enum IntersectionStatus
+{
+	NoIntersection,
+	PointIntersection,
+	LineIntersection,
+};
+
+bool is_all_zero(IntersectionStatus *array, int size) {
+	for (int i = 0; i < size; i++) {
+		if (array[i]) {
+			return false;
+		}
+	}
+	return true;
 }
 
-//judge whether one edge of triangle2 is at the same side of triangle1
-//0 for at same side,1 for at different side(include one vertex on face),2 for 2 vertices on the face
-int is_same_side(Vector3f va_2, Vector3f vb_2, EleFace *tria) {
-	Vector3f va_1 = tria->vertex0;
-	Vector3f nor = tria->normal;
-	float tmp1 = edge(va_1, va_2).Dot(nor);
-	float tmp2 = edge(va_1, vb_2).Dot(nor);
 
-	if ((tmp1 * tmp2 > 0))
-		return 0;
-	else if (tmp1 == 0 && tmp2 == 0)
-		return 2;
+/*
+ * If both two vertexes of va_2, va_b are on the plane that tria face defined (with one-line intersection), 
+ *		return LineIntersection;
+ * If both two vertexes of va_2, va_b are on the same side of the plane (with no intersection),
+ *      return PointIntersection 
+ * If the segment defined by two vertexes of va_2, va_b intersected with the plane (with one-point intersection),
+ *      return NoIntersection
+*/
+IntersectionStatus getSegmentFaceIntersection(Vector3f v1, Vector3f v2, EleFace *tria) {
+	Vector3f plane_point = tria->vertex0;
+	Vector3f plane_norm = tria->normal;
+	float v1_position = edge(plane_point, v1).Dot(plane_norm);
+	float v2_position = edge(plane_point, v2).Dot(plane_norm);
+
+	if ((v1_position * v2_position > 0))
+		return NoIntersection;
+	else if (v1_position || v2_position)
+		return PointIntersection;
 	else
-		return 1;
+		return LineIntersection;
 }
 
 //judege whether one edge of of triangle2 is separate from triangle1
 //0 for separation(include one vertex on edge),1 for intersection,2 for on the face(not judeged in this function)
-int is_intersection(Vector3f va2, Vector3f vb2, EleFace *tria) {
-	Vector3f &va_2 = va2;
-	Vector3f &vb_2 = vb2;
-	Vector3f va_1 = tria->vertex0;
-	Vector3f vb_1 = tria->vertex1;
-	Vector3f vc_1 = tria->vertex2;
-	Vector3f tmp1 = edge(va_1, vb_1).Cross(edge(va_1, va_2));
+/*
+ * v1_e the first vertex of the edge
+ * v2_e the second vertex of the edge
+ * tria the triangle
+ */
+IntersectionStatus is_intersection(Vector3f v1_edge, Vector3f v2_edge, EleFace *tria) {
+	Vector3f v1_tria = tria->vertex0;
+	Vector3f v2_tria = tria->vertex1;
+	Vector3f v3_tria = tria->vertex2;
+	Vector3f tmp1 = edge(v1_tria, v2_tria).Cross(edge(v1_tria, v1_edge));
 	//if ((tmp1.operator-(tria->normal).Iszero() == 1)) {//va_1 is on the face,change to vb_2
 	//	va_2 = vb2;
 	//	vb_2 = va2;
 	//	tmp1 = edge(va_1, vb_1).Cross(edge(va_1, va_2));
 	//}
-	Vector3f tmp2 = edge(vb_1, vc_1).Cross(edge(vb_1, va_2));
-	Vector3f tmp3 = edge(vc_1, va_1).Cross(edge(vc_1, va_2));
+	Vector3f tmp2 = edge(v2_tria, v3_tria).Cross(edge(v2_tria, v1_edge));
+	Vector3f tmp3 = edge(v3_tria, v1_tria).Cross(edge(v3_tria, v1_edge));
 	
-	float g1 = (edge(va_1, vb_2).Dot(tmp1)) * (edge(va_1, vc_1).Dot(tmp1));
-	float g2 = (edge(vb_1, vb_2).Dot(tmp2)) * (edge(vb_1, va_1).Dot(tmp2));
-	float g3 = (edge(vc_1, vb_2).Dot(tmp3)) * (edge(vc_1, vb_1).Dot(tmp3));
+	float g1 = (edge(v1_tria, v2_edge).Dot(tmp1)) * (edge(v1_tria, v3_tria).Dot(tmp1));
+	float g2 = (edge(v2_tria, v2_edge).Dot(tmp2)) * (edge(v2_tria, v1_tria).Dot(tmp2));
+	float g3 = (edge(v3_tria, v2_edge).Dot(tmp3)) * (edge(v3_tria, v2_tria).Dot(tmp3));
 
-	if (g1 >= 0 && g2 >= 0 && g3 >= 0) { return 1; }
+	if (g1 >= 0 && g2 >= 0 && g3 >= 0) { return PointIntersection; }
 	//else if ((g1 == 0 && g2 == 0) || (g2 == 0 && g3 == 0) || (g3 == 0 && g1 == 0)) { return 1; }
-	else { return 0; }
+	else { return NoIntersection; }
 }
 
-//calculate Determinant |A|
 float cal_determinant(float matrix[3][3]) {
 	float det = matrix[0][0] * matrix[1][1] * matrix[2][2] + matrix[1][0] * matrix[2][1] * matrix[0][2] + matrix[2][0] * matrix[0][1] * matrix[1][2];
 	det = det - (matrix[0][2] * matrix[1][1] * matrix[2][0] + matrix[0][0] * matrix[1][2] * matrix[2][1] + matrix[0][1] * matrix[1][0] * matrix[2][2]);
 	return det;
 }
 
-//solve equation
 bool solve_equation(float matrix_A[3][3], float array_b[3], float array_x[3]) {
 	float base_D = cal_determinant(matrix_A);
 	if (base_D != 0) {
@@ -244,9 +256,6 @@ bool calculate_intersect_point_colplanar(Vector3f p1, Vector3f p2, EleFace *tria
 	int c = judge_intersect(p1, p2, tria->vertex2, tria->vertex0);
 	if (a == 0 && b == 0 && c == 0) { return false; }
 	//intersect on segment vertex
-	/*if (a == 3 && b == 3) { answer.push_back(new Vector3f); v_assign(tria->vertex1, *answer.back()); }
-	if (b == 3 && c == 3) { answer.push_back(new Vector3f); v_assign(tria->vertex2, *answer.back()); }
-	if (a == 3 && c == 3) { answer.push_back(new Vector3f); v_assign(tria->vertex0, *answer.back()); }*/
 	if (a == 3 && b == 3) { answer.push_back(&tria->vertex1); }
 	if (b == 3 && c == 3) { answer.push_back(&tria->vertex2); }
 	if (a == 3 && c == 3) { answer.push_back(&tria->vertex0); }
@@ -263,95 +272,111 @@ bool calculate_intersect_point_colplanar(Vector3f p1, Vector3f p2, EleFace *tria
 /*
 calculate intersection segment line of t1 and t2;
 t1,t2 are two input triangles;
-line_section is the vector storing the two point of the intersection segment line of t1 and t2;
 */
-bool cal_intersection(EleFace *t1, EleFace *t2,vector<Vector3f*> &point) {
+bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 
-	//coplanor1r
-	if ((t1->normal.Cross(t2->normal)).L2Norm() == 0) { return false; }
+	//If Two triangles are parallel, return false.
+	if (cross(tria2->normal, tria1->normal).L2Norm() < epsilon) {
+		return false;
+	}
 
-	Vector3f va1 = t1->vertex0;
-	Vector3f vb1 = t1->vertex1;
-	Vector3f vc1 = t1->vertex2;
-	Vector3f va2 = t2->vertex0;
-	Vector3f vb2 = t2->vertex1;
-	Vector3f vc2 = t2->vertex2;
-	vector<Vector3f> edgeset1;//use start vertex to denote each edge
-	vector<Vector3f> edgeset2;
-	edgeset1.push_back(va1);
-	edgeset1.push_back(vb1);
-	edgeset1.push_back(vc1);
-	edgeset1.push_back(va1);
-	edgeset2.push_back(va2);
-	edgeset2.push_back(vb2);
-	edgeset2.push_back(vc2);
-	edgeset2.push_back(va2);
+	Vector3f va1 = tria1->vertex0;
+	Vector3f vb1 = tria1->vertex1;
+	Vector3f vc1 = tria1->vertex2;
 
-	/*judge whether t1 intersect with t2;if not,return;*/
+	Vector3f va2 = tria2->vertex0;
+	Vector3f vb2 = tria2->vertex1;
+	Vector3f vc2 = tria2->vertex2;
 
-	//judge whether each edge of t1 is at same side of t2
-	int is_sd[6];
-	for (int i = 0; i < 3; i++) { is_sd[i] = is_same_side(edgeset1[i], edgeset1[i + 1], t2); }
-	if (is_sd[0] == 0 && is_sd[1] == 0 && is_sd[2] == 0) { return false; }//three edges is at the same side,don't intersect with t2
+	vector<Vector3f> edgevector1;//use start vertex to denote each edge
+	vector<Vector3f> edgevector2;
 
-	//judge whether each edge of t2 is at same side of t1
-	for (int i = 0; i < 3; i++) { is_sd[i + 3] = is_same_side(edgeset2[i], edgeset2[i + 1], t1); }
-	if (is_sd[3] == 0 && is_sd[4] == 0 && is_sd[5] == 0) { return false; }
+	edgevector1.push_back(va1);
+	edgevector1.push_back(vb1);
+	edgevector1.push_back(vc1);
 
-	//judge each edge of t1 intersect with t2
-	int is_int[6];
+	edgevector2.push_back(va2);
+	edgevector2.push_back(vb2);
+	edgevector2.push_back(vc2);
+
+	/*judge whether tria1 intersect with tria2;if not,return false;*/
+
+	//ROUGHLY judge whether each edge of tria1 is at same side of tria2 plane
+	IntersectionStatus inters_status[6];
+
+	for (int i = 0; i < 3; i++) {
+		inters_status[i] = getSegmentFaceIntersection(
+			edgevector1[i % 3], edgevector1[(i + 1) % 3], tria2);
+	}
+	if (is_all_zero(inters_status,3)) {
+		return false;
+	}//three edges is at the same side,don't intersect with tria2
+
+	//judge whether each edge of tria2 is at same side of tria1
+	for (int i = 0; i < 3; i++) {
+		inters_status[i + 3] = getSegmentFaceIntersection(
+			edgevector2[i % 3], edgevector2[(i + 1) % 3], tria1);
+	}
+	if (is_all_zero(inters_status + 3, 3)) {
+		return false;
+	}
+
+	//CAREFULLY judge each edge of tria1 intersect with tria2
 	for (int i = 0; i < 6; i++) {
-		if (is_sd[i] == 0) { is_int[i] = 0; }//at the same side, separate
-		if (is_sd[i] == 2) { is_int[i] = 2; }//on the face
-		if (is_sd[i] == 1) {
-			if (i < 3) { is_int[i] = is_intersection(edgeset1[i], edgeset1[i + 1], t2); }//t1 edge
-			else { is_int[i] = is_intersection(edgeset2[i - 3], edgeset2[i + 1 - 3], t1); }//t2 edge
+		if (inters_status[i] == 1) {
+			if (i < 3) {
+				inters_status[i] = is_intersection(
+					edgevector1[i], edgevector1[i + 1], tria2);
+			}//tria1 edge
+			else {
+				inters_status[i] = is_intersection(
+					edgevector2[i % 3], edgevector2[(i + 1) % 3], tria1);
+			}//tria2 edge
 		}
 	}
-	if (is_int[0] == 0 && is_int[1] == 0 && is_int[2] == 0 && is_int[3] == 0 && is_int[4] == 0 && is_int[5] == 0) { return false; }//three edges don't intersect with t2
 
-	
+	if (is_all_zero(inters_status, 6)) {
+		return false;
+	}
 
 	/*calculate the intersect point*/
 
-	//vector<Vector3f*> point;
 	bool find_answer = false;
 
 	for (int i = 0; i < 6; i++) {
-
-		if (is_int[i] == 2) {
+		if (inters_status[i] == 2) {
 			if (i < 3) {
 				for (int j = 3; j < 6; j++) {
-					if (is_int[j] == 2) {//two edge overlap
-						if (cal_intersect_point_collinear(edgeset1[i], edgeset1[i + 1], edgeset2[j - 3], edgeset2[j + 1 - 3], point)) { find_answer = true; }
+					if (inters_status[j] == 2) {//two edge overlap
+						if (cal_intersect_point_collinear(edgevector1[i], edgevector1[i + 1], edgevector2[j - 3], edgevector2[j + 1 - 3], point)) {
+							find_answer = true;
+						}
 					}
-					is_int[i] = 0;
-					is_int[j] = 0;
+					inters_status[i] = NoIntersection;
+					inters_status[j] = NoIntersection;
 				}
 			}
 			if (i < 3) {
-				if (calculate_intersect_point_colplanar(edgeset1[i], edgeset1[i + 1], t2, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point_colplanar(edgeset2[i - 3], edgeset2[i + 1 - 3], t1, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
 			}
 		}
 		if (point.size() == 2) { break; }
 
-		if (is_int[i] == 1) {
+		if (inters_status[i] == 1) {
 			if (i < 3) {
-				if (calculate_intersect_point(edgeset1[i], edgeset1[i + 1], t2, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point(edgeset2[i - 3], edgeset2[i + 1 - 3], t1, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
 			}
 		}
-
-		
 	}
 	if (find_answer) { 
 
 		return true; 
 	}
-	
+	return false;
 }

@@ -1,20 +1,20 @@
 #include "octree.h"
-#include "stlreading.h"
+#include "stlloading.h"
 #include <iostream>
 
 int main()
 {
-	Region root_region_a = { 0,0,-0.1,8 };
-	Region root_region_b = { 1,1,-0.1,8 };
-	Octree tree_a(0, root_region_a, 0.1, 5);
-	Octree tree_b(0, root_region_b, 0.1, 5);
+	Region root_region_a = { 0.f, 0.f, -0.1f, 8.f };
+	Region root_region_b = { 1.f, 1.f, -0.1f, 8.f };
+	Octree tree_a(0, root_region_a, 0.1f, 5);
+	Octree tree_b(0, root_region_b, 0.1f, 5);
 
 	for (int j = 0; j < 8; j++)
 	{
-		Vector3f normal(0, 0, 1);
+		Vector3f normal(0.f, 0.f, 1.f);
 		Vector3f vertex[3];
-		float i = j;
-		float k = i + 0.5;
+		float i = (float)j;
+		float k = i + 0.5f;
 		vertex[0] = { i,i,0 };
 		vertex[1] = { i,k,0 };
 		vertex[2] = { k,i,0 };
@@ -26,8 +26,8 @@ int main()
 	{
 		Vector3f normal(0, 0, 1);
 		Vector3f vertex[3];
-		float i = j;
-		float k = i + 0.5;
+		float i = (float)j;
+		float k = i + 0.5f;
 		vertex[0] = { i,i,0 };
 		vertex[1] = { i,k,0 };
 		vertex[2] = { k,i,0 };

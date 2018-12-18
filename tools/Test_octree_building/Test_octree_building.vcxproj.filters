@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="face_intersection_test.cpp">
+    <ClCompile Include="..\..\src\octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\faceintersect.cpp">
+    <ClCompile Include="Test_octree_building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\stlreading.cpp">
+    <ClCompile Include="..\..\src\stlloading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\faceintersect.h">
+    <ClInclude Include="..\..\src\octree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\vector3.h">
+    <ClInclude Include="..\..\src\stlloading.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

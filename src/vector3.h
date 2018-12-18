@@ -26,7 +26,7 @@ public:
 	C z;
 public:
 	// constructors
-	Vector3() { x = y= z = 0; }
+	Vector3() { x = y = z = 0; }
 	Vector3(const C & value) { x = y = z = value; }
 	Vector3(const C & a, const C & b, const C & c) {
 		x = a;
@@ -46,23 +46,23 @@ public:
 
 
 	// binary operators
-	Vector3<C> operator+ (const Vector3<C> & r) const { return Vector3<C>(x+r.x, y+r.y, z+r.z); }
-	Vector3<C> operator- (const Vector3<C> & r) const { return Vector3<C>(x-r.x, y-r.y, z-r.z); }
+	Vector3<C> operator+ (const Vector3<C> & r) const { return Vector3<C>(x + r.x, y + r.y, z + r.z); }
+	Vector3<C> operator- (const Vector3<C> & r) const { return Vector3<C>(x - r.x, y - r.y, z - r.z); }
 	Vector3<C> operator* (const C & r) const { return Vector3<C>(x*r, y*r, z*r); }
 
 	friend Vector3<C> operator*(const C & l, const Vector3<C> & r);
 
 	//friend Vector3<C> operator*(double mul, const Vector3<C> & r);
 
-	Vector3<C> operator/ (const C & r) const { return Vector3<C>(x/r, y/r, z/r); }
+	Vector3<C> operator/ (const C & r) const { return Vector3<C>(x / r, y / r, z / r); }
 
 
 	// unary operators
-	Vector3<C> operator-() const { return Vector3<C>(-x, -y, -z); } 
+	Vector3<C> operator-() const { return Vector3<C>(-x, -y, -z); }
 
 
 	// assignment operations
-	Vector3<C> & operator= (const Vector3<C> & r) { x=r.x; y=r.y; z=r.z; return *this; }
+	Vector3<C> & operator= (const Vector3<C> & r) { x = r.x; y = r.y; z = r.z; return *this; }
 	Vector3<C> & operator+= (const Vector3<C> & r) { return (*this) = (*this) + r; }
 	Vector3<C> & operator-= (const Vector3<C> & r) { return (*this) = (*this) - r; }
 	Vector3<C> & operator*= (const C & r) { return (*this) = (*this) * r; }
@@ -89,18 +89,18 @@ public:
 		}
 	}
 	// dot and cross products
-	C Dot(const Vector3<C> & r) const { return x*r.x + y*r.y + z*r.z; }
-	Vector3<C> Cross(const Vector3<C> & r) const { 
-		return Vector3<C>(	y * r.z - z * r.y,
-							z * r.x - x * r.z,
-							x * r.y - y * r.x ); 
-	} 
+	C Dot(const Vector3<C> & r) const { return x * r.x + y * r.y + z * r.z; }
+	Vector3<C> Cross(const Vector3<C> & r) const {
+		return Vector3<C>(y * r.z - z * r.y,
+			z * r.x - x * r.z,
+			x * r.y - y * r.x);
+	}
 
 
 	// norm (lengths) functions
-	C L1Norm() const { return fabs(x) + fabs(y) + fabs(z);}
-	C L2Norm() const { return sqrt(Dot(*this));}
-	C Distance(const Vector3<C> & r) const { return (*this-r).L2Norm();} 
+	C L1Norm() const { return fabs(x) + fabs(y) + fabs(z); }
+	C L2Norm() const { return sqrt(Dot(*this)); }
+	C Distance(const Vector3<C> & r) const { return (*this - r).L2Norm(); }
 
 	//judge zero vector
 	bool Iszero() {
@@ -118,6 +118,13 @@ public:
 		return out << r.x << " " << r.y << " " << r.z;
 	}
 };
+
+template <class C>
+Vector3<C> cross(Vector3<C> &a, Vector3<C> &b) {
+	return Vector3<C>(a.y * b.z - a.z * b.y,
+		a.z * b.x - a.x * b.z,
+		a.x * b.y - a.y * b.x);
+}
 
 template <class C>
 Vector3<C> min(const Vector3<C> a, const Vector3<C> b, const Vector3<C> c) {

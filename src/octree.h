@@ -4,8 +4,8 @@
 #define NULL 0
 
 #include <set>
-#include "stlreading.h"
-#include "faceintersect.h"
+#include "stlloading.h"
+#include "facepair.h"
 //octree is a cubic tree. Each length of its eages is the same.
 
 class Octree
