@@ -182,6 +182,7 @@ bool Octree::findIntersectedNode(Octree *nodeB)
 			}
 		}
 	}
+	return true;
 }
 
 
@@ -220,6 +221,7 @@ bool might_intersected_faces_list::getMightIntersectedFaces(Octree *nodeA)
 		for (int i = 0; i < 8; i++)
 			getMightIntersectedFaces(nodeA->getSubNodes(i));
 	}
+	return true;
 }
 
 bool might_intersected_faces_list::fillIintersectLineList()

@@ -3,8 +3,32 @@
 #include "octree.h"
 #include "vector3.h"
 #include <vector>
-#include <algorithm>
 #define epsilon 1e-9
+
+#ifndef __min
+#define __min(a,b) ((a)<(b)?(a):(b))
+#endif
+
+#ifndef __max
+#define __max(a,b) ((a)>(b)?(a):(b))
+#endif
+
+float max(float x, float y, float z) {
+	return __max(__max(x, y), z);
+}
+
+float min(float x, float y, float z) {
+	return __min(__min(x, y), z);
+}
+
+float max(float x, float y) {
+	return __max(x, y);
+}
+
+float min(float x, float y) {
+	return __min(x, y);
+}
+
 
 Vector3f edge(Vector3f a, Vector3f b) {
 	return Vector3f(b.x - a.x, b.y - a.y, b.z - a.z);
@@ -41,12 +65,15 @@ IntersectionStatus getSegmentFaceIntersection(Vector3f v1, Vector3f v2, EleFace 
 	float v1_position = edge(plane_point, v1).Dot(plane_norm);
 	float v2_position = edge(plane_point, v2).Dot(plane_norm);
 
-	if ((v1_position * v2_position > 0))
+	if ((v1_position * v2_position > 0)) {
 		return NoIntersection;
-	else if (v1_position || v2_position)
+	}
+	else if (v1_position || v2_position) {
 		return PointIntersection;
-	else
+	}
+	else {
 		return LineIntersection;
+	}
 }
 
 //judege whether one edge of of triangle2 is separate from triangle1
@@ -73,9 +100,12 @@ IntersectionStatus is_intersection(Vector3f v1_edge, Vector3f v2_edge, EleFace *
 	float g2 = (edge(v2_tria, v2_edge).Dot(tmp2)) * (edge(v2_tria, v1_tria).Dot(tmp2));
 	float g3 = (edge(v3_tria, v2_edge).Dot(tmp3)) * (edge(v3_tria, v2_tria).Dot(tmp3));
 
-	if (g1 >= 0 && g2 >= 0 && g3 >= 0) { return PointIntersection; }
+	if (g1 >= 0 && g2 >= 0 && g3 >= 0) 
+		return PointIntersection;
 	//else if ((g1 == 0 && g2 == 0) || (g2 == 0 && g3 == 0) || (g3 == 0 && g1 == 0)) { return 1; }
-	else { return NoIntersection; }
+	else {
+		return NoIntersection;
+	}
 }
 
 float cal_determinant(float matrix[3][3]) {
@@ -97,7 +127,9 @@ bool solve_equation(float matrix_A[3][3], float array_b[3], float array_x[3]) {
 		array_x[2] = D[2] / base_D;
 		return true;
 	}
-	else { return false; }//no answer
+	else {
+		return false;
+	}//no answer
 }
 
 //calculate intersect point of edge p1p2 and face tria,put intersect point in answer
@@ -135,15 +167,22 @@ bool calculate_intersect_point(Vector3f p1, Vector3f p2, EleFace *tria, vector<V
 		}
 		return true;
 	}
-	else { return false; }
+	else {
+		return false;
+	}
 }
 
 /*two edges are collinear*/
 bool cal_intersect_point_collinear(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f q2, vector<Vector3f*> &answer) {
 	//fast judge separate
-	if ((max(p1.x, p2.x) < min(p1.x, p2.x)) || (min(p1.x, p2.x) > max(p1.x, p2.x))) { return false; }
-	if ((max(p1.y, p2.y) < min(p1.y, p2.y)) || (min(p1.y, p2.y) > max(p1.y, p2.y))) { return false; }
-	if ((max(p1.z, p2.z) < min(p1.z, p2.z)) || (min(p1.z, p2.z) > max(p1.z, p2.z))) { return false; }
+	for (int i = 0; i < 3; i++) {
+		if (max(p1[i], p2[i]) < min(q1[i], q2[i])) { 
+			return false;
+		}
+		else if(min(p1[i], p2[i]) > max(q1[i], q2[i])) {
+			return false;
+		}
+	}
 
 	Vector3f tmp = edge(p1, p2);
 	vector<Vector3f*> tmpv;
@@ -163,14 +202,11 @@ bool cal_intersect_point_collinear(Vector3f p1, Vector3f p2, Vector3f q1, Vector
 	for (int i = 0; i < 2; i++) {
 		for (int j = 2; j < 4; j++) {
 			if (t[i] == t[j]) {
-				answer.push_back(new Vector3f);
-				answer.back()->x = tmpv[i]->x;
-				answer.back()->y = tmpv[i]->y;
-				answer.back()->z = tmpv[i]->z;
+				answer.push_back(new Vector3f(tmpv[i]->x, tmpv[i]->x, tmpv[i]->x));
 			}
 		}
 	}
-	if (answer.size() == 2) { return true; }
+	if (answer.size() == 2) return true;
 	for (int i = 0; i < 4; i++) {
 		if (t[i]<tmax && t[i]>tmin) {
 			answer.push_back(new Vector3f);
@@ -178,7 +214,7 @@ bool cal_intersect_point_collinear(Vector3f p1, Vector3f p2, Vector3f q1, Vector
 			answer.back()->y = tmpv[i]->y;
 			answer.back()->z = tmpv[i]->z;
 		}
-		if (answer.size() == 2) { return true; }
+		if (answer.size() == 2) return true;
 	}
 	return false;
 }
@@ -197,9 +233,14 @@ int judge_same_side(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f q2) {
 //0 for separate,1 for intersect,2 for same line,3 for intersect point is segment vertex
 int judge_intersect(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f q2) {
 	//fast judge separate
-	if ((max(p1.x, p2.x) < min(p1.x, p2.x)) || (min(p1.x, p2.x) > max(p1.x, p2.x))) { return 0; }
-	if ((max(p1.y, p2.y) < min(p1.y, p2.y)) || (min(p1.y, p2.y) > max(p1.y, p2.y))) { return 0; }
-	if ((max(p1.z, p2.z) < min(p1.z, p2.z)) || (min(p1.z, p2.z) > max(p1.z, p2.z))) { return 0; }
+	for (int i = 0; i < 3; i++) {
+		if ((max(p1[i], p2[i]) < min(q1[i], q2[i]))) {
+			return 0;
+		}
+		else if (min(p1[i], p2[i]) > max(q1[i], q2[i])) {
+			return 0;
+		}
+	}
 
 	Vector3f edge_p = edge(p1, p2);
 	Vector3f edge_q = edge(q1, q2);
@@ -224,7 +265,7 @@ float cal_determinant_2(float a, float b, float c, float d, float e, float f) {
 }
 
 //calculate intersect point of two conlplanar segment lines
-void cal_intersect_point_segment(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f q2, vector<Vector3f*> &answer) {
+void cal_intersect_point_segment(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f q2, vector<Vector3f*> &res) {
 	Vector3f edge_p = edge(p1, p2);
 	Vector3f edge_q = edge(q1, q2);
 	float matrix_A[3][2];
@@ -241,11 +282,8 @@ void cal_intersect_point_segment(Vector3f p1, Vector3f p2, Vector3f q1, Vector3f
 	if (t == 2) { t = cal_determinant_2(matrix_A[1][0], matrix_A[1][1], matrix_A[2][0], matrix_A[2][1], array_b[1], array_b[2]); }
 	if (t == 2) { t = cal_determinant_2(matrix_A[2][0], matrix_A[2][1], matrix_A[0][0], matrix_A[0][1], array_b[2], array_b[0]); }
 
-	answer.push_back(new Vector3f);
-	answer.back()->x = p1.x + t * edge_p.x;
-	answer.back()->y = p1.y + t * edge_p.y;
-	answer.back()->z = p1.z + t * edge_p.z;
-	
+	Vector3f *intersect_points = new Vector3f(p1.x + t * edge_p.x, p1.y + t * edge_p.y, p1.z + t * edge_p.z);
+	res.push_back(new Vector3f);
 	return;
 }
 
@@ -288,6 +326,15 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 	Vector3f vb2 = tria2->vertex1;
 	Vector3f vc2 = tria2->vertex2;
 
+	for (int i = 0; i < 3; i++) {
+		if (max(va1[i], vb1[i], vc1[i]) < min(va2[i], vb2[i], vc2[i])) {
+			return false;
+		}
+		else if(min(va1[0], vb1[0], vc1[0]) > max(va2[0], vb2[0], vc2[0])){
+			return false;
+		}
+	}
+
 	vector<Vector3f> edgevector1;//use start vertex to denote each edge
 	vector<Vector3f> edgevector2;
 
@@ -326,7 +373,7 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 		if (inters_status[i] == 1) {
 			if (i < 3) {
 				inters_status[i] = is_intersection(
-					edgevector1[i], edgevector1[i + 1], tria2);
+					edgevector1[i%3], edgevector1[(i + 1)%3], tria2);
 			}//tria1 edge
 			else {
 				inters_status[i] = is_intersection(
@@ -348,7 +395,7 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 			if (i < 3) {
 				for (int j = 3; j < 6; j++) {
 					if (inters_status[j] == 2) {//two edge overlap
-						if (cal_intersect_point_collinear(edgevector1[i], edgevector1[i + 1], edgevector2[j - 3], edgevector2[j + 1 - 3], point)) {
+						if (cal_intersect_point_collinear(edgevector1[i%3], edgevector1[(i + 1)%3], edgevector2[(j - 3)%3], edgevector2[(j + 1 - 3)%3], point)) {
 							find_answer = true;
 						}
 					}
@@ -357,20 +404,20 @@ bool cal_intersection(EleFace *tria1, EleFace *tria2,vector<Vector3f*> &point) {
 				}
 			}
 			if (i < 3) {
-				if (calculate_intersect_point_colplanar(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector1[i%3], edgevector1[(i + 1)%3], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point_colplanar(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
+				if (calculate_intersect_point_colplanar(edgevector2[(i - 3)%3], edgevector2[(i + 1 - 3)%3], tria1, point)) { find_answer = true; }
 			}
 		}
 		if (point.size() == 2) { break; }
 
 		if (inters_status[i] == 1) {
 			if (i < 3) {
-				if (calculate_intersect_point(edgevector1[i], edgevector1[i + 1], tria2, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector1[i%3], edgevector1[(i + 1)%3], tria2, point)) { find_answer = true; }
 			}
 			else {
-				if (calculate_intersect_point(edgevector2[i - 3], edgevector2[i + 1 - 3], tria1, point)) { find_answer = true; }
+				if (calculate_intersect_point(edgevector2[(i - 3)%3], edgevector2[(i + 1 - 3)%3], tria1, point)) { find_answer = true; }
 			}
 		}
 	}

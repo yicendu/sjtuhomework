@@ -18,3 +18,12 @@
 /tools/face_intersection_test/x64/Debug
 /tools/find_might_intersected_faces test/x64/Debug
 /.vs/sjtuhomework/v15/ipch/AutoPCH
+/tools/Test_face_pairing/x64/Debug
+/tools/Test_octree_building/x64/Debug
+/tools/Test_stl_intersection/x64
+/tools/Test_latent_faces_searching/x64/Debug
+/tools/Test_stl_loading/x64/Debug/Test_stl_loading.tlog
+/tools/Test_stl_loading/x64/Debug
+/tools/Test_octree_building/x64/Release
+/tools/Test_octree_building/.vs/Tree_test/v15
+/tools/Test_stl_loading/x64/Release

@@ -1,11 +1,11 @@
 #pragma once
 
 #ifndef __min
-#define __min(a,b) ((a)<(b)?(a):(b);
+#define __min(a,b) ((a)<(b)?(a):(b))
 #endif
 
 #ifndef __max
-#define __max(a,b) ((a)>(b)?(a):(b);
+#define __max(a,b) ((a)>(b)?(a):(b))
 #endif
 
 #include <cmath>
@@ -140,6 +140,8 @@ template <class C>
 float max(const Vector3<C> a) {
 	return (__max(__max(a.x, a.y), a.z));
 }
+
+
 
 #undef __max
 #undef __min

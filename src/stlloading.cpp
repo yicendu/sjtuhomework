@@ -13,7 +13,7 @@ Vector3f readVector3D(std::istream& is) {
 }
 
 // Warning!This method doesn't check the format of the stl file.
-StlFile slt_read(char* name) {
+StlFile slt_read(const char* name) {
 
 	StlFile stl;
 
