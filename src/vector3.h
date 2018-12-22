@@ -10,7 +10,6 @@
 
 #include <cmath>
 #include <iostream>
-using namespace std;
 
 // classes declaration
 template <class C> class Vector3;
@@ -43,6 +42,7 @@ public:
 		y = right.y;
 		z = right.z;
 	}
+
 
 
 	// binary operators
@@ -114,7 +114,7 @@ public:
 		return Vector3<C>(l*r.x, l*r.y, l*r.z);
 	}
 
-	friend ostream & operator<< (ostream & out, const Vector3<C> & r) {
+	friend std::ostream & operator<< (std::ostream & out, const Vector3<C> & r) {
 		return out << r.x << " " << r.y << " " << r.z;
 	}
 };
@@ -134,6 +134,16 @@ Vector3<C> min(const Vector3<C> a, const Vector3<C> b, const Vector3<C> c) {
 template <class C>
 Vector3<C> max(const Vector3<C> a, const Vector3<C> b, const Vector3<C> c) {
 	return Vector3<C>(__max(__max(a.x, b.x), c.x), __max(__max(a.y, b.y), c.y), __max(__max(a.z, b.z), c.z));
+}
+
+template <class C>
+Vector3<C> min(const Vector3<C> a, const Vector3<C> b) {
+	return Vector3<C>(__min(a.x, b.x), __min(a.y, b.y), __min(a.z, b.z));
+}
+
+template <class C>
+Vector3<C> max(const Vector3<C> a, const Vector3<C> b) {
+	return Vector3<C>(__max(a.x, b.x), __max(a.y, b.y), __max(a.z, b.z));
 }
 
 template <class C>

@@ -1,12 +1,13 @@
 #ifndef TDWIDGET_H
 #define TDWIDGET_H
 
-#include <qgl.h>
+#include <QtOpenGL/qgl.h>
 #include "stlloading.h"
-#include "GL/glut.h"
+#include "octree.h"
+#include "glut.h"
 #include "GL/GL.h"
 #include <QKeyEvent>
-#include <QGLWidget>
+#include <QtOpenGL/QGLWidget>
 #include <QDebug>
 #include <QVector3D>
 //#include <Eigen/Dense> 
@@ -21,7 +22,7 @@ class TDWidget : public QGLWidget
 
 public:
     
-	TDWidget( QWidget* parent = 0, const char* name = 0, bool fs = false );
+	TDWidget( QWidget* parent = 0, const char* name = 0, bool fs=false);
   ~TDWidget();
 
 public Q_SLOTS:
@@ -59,6 +60,7 @@ private:
 
    //记录模型
    std::map<QString, StlFile> stlFileMap;
+   std::map<QString, Octree> octreeMap;
    FaceList fList;
   
    //投影参数

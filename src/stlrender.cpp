@@ -1,7 +1,7 @@
-#include "stlrender.h"
-#include<gl\GLUT.H>
+#include <iostream>
+#include <glut.h>
 
-#include<iostream>
+#include "stlrender.h"
 
 std::map<std::string, StlFile> stlFileMap;
 
@@ -123,6 +123,8 @@ void reshape(int w, int h)
 // 键位操作说明：鼠标拖动（上下左右）旋转视角 pgUp pgDw拉近（远）相机位置
 void myKeys(int key, int x, int y)
 {
+	x = x;
+	y = y;
 	if (key == GLUT_KEY_UP){
 		angle_x += 5.0f;
 		if (angle_x > 355.0f)angle_x = 0.0f;
@@ -211,7 +213,7 @@ bool addFile(std::string fileName, StlFile file) {
 }
 
 bool hide(std::string fileName) {
-	int affectNum = fileToRender.erase(fileName);
+	size_t affectNum = fileToRender.erase(fileName);
 	return affectNum > 0;
 }
 

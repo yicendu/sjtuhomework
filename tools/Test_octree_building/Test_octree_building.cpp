@@ -10,7 +10,7 @@ Vector3f vertex[3];
 
 int main(int argc, char** argv)
 {
-	std::cout << "Hello World!" << endl;
+	std::cout << "Hello World!" << std::endl;
 	Region root_region = { 0,0,0,180 };
 
 	Octree root(0, root_region, 2, 5);
@@ -49,12 +49,12 @@ int main(int argc, char** argv)
 		std::set<EleFace*>::iterator ele;
 		for (ele = eles.begin(); ele != eles.end(); ele++) {
 			EleFace* face = *ele;
-			std::cout << face->vertex0 << endl << face->vertex1 << endl << face->vertex2 << endl;
+			std::cout << face->vertex0 << std::endl << face->vertex1 << std::endl << face->vertex2 << std::endl;
 		}
 	}
 
 	if (argc < 2) {
-		std::cerr << "program requires at least one argument of filename" << endl;
+		std::cerr << "program requires at least one argument of filename" << std::endl;
 		return 1;
 	}
 
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 		std::set<EleFace*>::iterator ele;
 		for (ele = eles.begin(); ele != eles.end(); ele++) {
 			EleFace* face = *ele;
-			std::cout << face->vertex0 << endl << face->vertex1 << endl << face->vertex2 << endl;
+			std::cout << face->vertex0 << std::endl << face->vertex1 << std::endl << face->vertex2 << std::endl;
 		}
 	}
 }

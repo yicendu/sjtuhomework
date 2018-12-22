@@ -1,4 +1,5 @@
 #pragma once
 #include "octree.h"
+#include "vector3.h"
 
-bool cal_intersection(EleFace *t1, EleFace *t2, vector<Vector3f*> &point);
+bool cal_intersection(std::vector<EleFace*> t, std::vector<Vector3f*> &point);

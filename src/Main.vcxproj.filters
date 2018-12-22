@@ -40,10 +40,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
+    <ClCompile Include="modelintersection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include=".\intersectiondiscovery_plugin_import.cpp">
+    <ClCompile Include=".\main_plugin_import.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="octree.cpp">
@@ -52,28 +52,31 @@
     <ClCompile Include="stlloading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stlrender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tdwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="facepair.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwindow.h">
+    <QtMoc Include="modelintersection.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tdwidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="debug\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="release\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <ClInclude Include="ui_mainwindow.h">
+    <ClInclude Include="ui_modelintersection.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui">
+    <QtUic Include="modelintersection.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -81,10 +84,13 @@
     <ClInclude Include="octree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vector3.h">
+    <ClInclude Include="stlloading.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stlloading.h">
+    <ClInclude Include="stlrender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="facepair.h">
