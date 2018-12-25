@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include "Vector3.h"
+#include <cmath>
+#include <algorithm>
 
 #define NULL 0
 
@@ -15,6 +17,8 @@ public:
 	float y;
 	float z;
 	float length;
+	Vector3f min;
+	Vector3f max;
 };
 
 
@@ -26,6 +30,21 @@ namespace std {
 	};
 }
 
+class Edge {
+public:
+	Edge() {}
+	Edge(Vector3f start_point, Vector3f end_point) {
+		start = start_point;
+		end = end_point;
+	}
+	void init(Vector3f start_point, Vector3f end_point) {
+		start = start_point;
+		end = end_point;
+	}
+public:
+	Vector3f start;
+	Vector3f end;
+};
 
 class EleFace {
 public:
@@ -39,11 +58,14 @@ public:
 	Vector3f vertex0;
 	Vector3f vertex1;
 	Vector3f vertex2;
+	Vector3f vertex[3];
+	Edge edge[3];
 	int a;
 	int b;
 	int c;
 	Region region;
 };
+
 
 class StlFile {
 public:
@@ -51,6 +73,37 @@ public:
 	std::vector<Vector3f> vertices;
 	std::unordered_map<Vector3f, int> indexMap;
 	std::vector<EleFace> faces;
+
+
+	inline Vector3f minVector3f(Vector3f a, Vector3f b)
+	{
+		return Vector3f(std::min(a.x, b.x),
+			std::min(a.y, b.y),
+			std::min(a.z, b.z));
+	}
+
+	inline Vector3f maxVector3f(Vector3f a, Vector3f b)
+	{
+		return Vector3f(std::max(a.x, b.x),
+			std::max(a.y, b.y),
+			std::max(a.z, b.z));
+	}
+
+	Vector3f MinCoord() {
+		Vector3f minCoord = Vector3f(0, 0, 0);
+		for (size_t i = 0; i < vertices.size(); i++)
+			minCoord = minVector3f(vertices[i], minCoord);
+		return minCoord;
+	}
+
+	Vector3f MaxCoord() {
+		Vector3f maxCoord = Vector3f(0, 0, 0);
+		for (size_t i = 0; i < vertices.size(); i++)
+			maxCoord = maxVector3f(vertices[i], maxCoord);
+		return maxCoord;
+	}
+
+
 
 	int getVector(Vector3f v) {
 		if (indexMap.count(v)) {

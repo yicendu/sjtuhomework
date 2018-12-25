@@ -22,9 +22,9 @@ int main(int argc, char** argv)
 
 	might_intersected_faces_list a_b(&root1, &root2);
 	std::cout << a_b.intersectLine_list.size();
-	for (int i = 0; i < a_b.intersectLine_list.size(); i++) {
-		std::cout << *(a_b.intersectLine_list[i][0]) << endl << *(a_b.intersectLine_list[i][1]) << endl;
-	}
+	//for (int i = 0; i < a_b.intersectLine_list.size(); i++) {
+	//	std::cout << *(a_b.intersectLine_list[i][0]) << endl << *(a_b.intersectLine_list[i][1]) << endl;
+	//}
 	return 0;
 }
 

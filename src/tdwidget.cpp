@@ -1,9 +1,9 @@
 #include "tdwidget.h"
-#include <QDebug>
 
-TDWidget::TDWidget(QWidget* parent, const char* name, bool fs)
-	: QGLWidget(parent)
-{
+
+TDWidget::TDWidget(QWidget* parent, const char* name, bool fs) :QGLWidget(parent) {
+	name = name;
+	fullscreen = fs;
 	if (fullscreen)
 		showFullScreen();
 }
@@ -208,7 +208,7 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	QByteArray c = filePath.toLocal8Bit();
 	strcpy(tmp, c.data());
 	stlFileMap[fileName] = slt_read(tmp);
-	
+	octreeMap[fileName] = Octree(&stlFileMap[fileName], 2.f,10);
 	return true;
 }
 
@@ -231,12 +231,11 @@ void TDWidget::hideIt()
 	updateGL();
 }
 
-void TDWidget::showAllFile(QStringList fileName, QStringList filePath,int COI)
+void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 {
 	fList.clear();
 	for (int i = 0; i < fileName.size(); i++)
 	{
-		const char* tmp = fileName[i].toUtf8();
 		loadObjObject(fileName[i], filePath[i]);
 		if (fList.empty())
 			fList = stlFileMap[fileName[i]].faces;
@@ -244,6 +243,7 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath,int COI)
 			fList.insert(fList.end(), stlFileMap[fileName[i]].faces.begin(), stlFileMap[fileName[i]].faces.end());
 	}
 	SetBoundaryBox(stlFileMap[fileName[COI]].MinCoord(), stlFileMap[fileName[COI]].MaxCoord());
+	//SetBoundaryBox(octreeMap[fileName[COI]].m_region.min, octreeMap[fileName[COI]].m_region.max);
 	updateGL();
 	stlFileMap.clear();
 }
@@ -253,6 +253,7 @@ void TDWidget::selectFile(QString fileName, QString filePath)
 	loadObjObject(fileName,filePath);
 	fList = stlFileMap[fileName].faces;
 	SetBoundaryBox(stlFileMap[fileName].MinCoord(), stlFileMap[fileName].MaxCoord());
+	//SetBoundaryBox(octreeMap[fileName].m_region.min, octreeMap[fileName].m_region.max);
 	updateGL();
 	deleteFile(fileName);
 }

@@ -5,7 +5,7 @@
 #include<map>
 #include <mutex>
 #include<set>
-#include "stlreading.h"
+#include "stlloading.h"
 
 
 class StlRender {

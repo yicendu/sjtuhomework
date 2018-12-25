@@ -9,6 +9,17 @@
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
+bool isRegionIntersected(Region a, Region b)
+{
+	if ((a.x + a.length) <= b.x) return false;
+	if ((b.x + b.length) <= a.x) return false;
+	if ((a.y + a.length) <= b.y) return false;
+	if ((b.y + b.length) <= a.y) return false;
+	if ((a.z + a.length) <= b.z) return false;
+	if ((b.z + b.length) <= a.z) return false;
+	return true;
+}
+
 Octree::Octree(int depth, Region region, float min_length, int max_ele_num)
 {
 	m_count = 0;
@@ -85,16 +96,7 @@ void Octree::splitNode()
 	m_eles.clear();
 }
 
-bool Octree::isIntersected(Region a, Region b)
-{
-	if ((a.x + a.length) < b.x) return false;
-	if ((b.x + b.length) < a.x) return false;
-	if ((a.y + a.length) < b.y) return false;
-	if ((b.y + b.length) < a.y) return false;
-	if ((a.z + a.length) < b.z) return false;
-	if ((b.z + b.length) < a.z) return false;
-	return true;
-}
+
 
 void Octree::insertEle(EleFace* ele)
 {
@@ -110,7 +112,7 @@ void Octree::insertEle(EleFace* ele)
 	}
 
 	for (int i = 0; i < 8; i++) {
-		if (isIntersected(m_sub_node[i]->m_region, ele->region)) {
+		if (isRegionIntersected(m_sub_node[i]->m_region, ele->region)) {
 			m_sub_node[i]->insertEle(ele);
 		}
 	}
@@ -122,7 +124,7 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 		std::set<EleFace*>::iterator ele;
 		for (ele = m_eles.begin(); ele != m_eles.end(); ele++) {
 			EleFace* face = *ele;
-			if (isIntersected(face->region, region)) {
+			if (isRegionIntersected(face->region, region)) {
 				eles.insert(face);
 			}
 		}
@@ -133,7 +135,7 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 	std::set<EleFace*> ele[8];
 
 	for (int i = 0; i < 8; i++) {
-		if (isIntersected(m_sub_node[i]->m_region, region)) {
+		if (isRegionIntersected(m_sub_node[i]->m_region, region)) {
 			ele[i] = m_sub_node[i]->queryEles(region);
 		}
 	}
@@ -148,7 +150,7 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 
 bool Octree::findIntersectedNode(Octree *nodeB)
 {
-	if (!isIntersected(this->m_region, nodeB->m_region))
+	if (!isRegionIntersected(this->m_region, nodeB->m_region))
 		return false;
 	else
 		m_intersected_node.push_back(nodeB);
@@ -235,8 +237,11 @@ bool might_intersected_faces_list::fillIintersectLineList()
 			/*size_t k = 0;*/
 			for (auto k = m_i_f_list[i]->b_eles.begin(); k != m_i_f_list[i]->b_eles.end(); k++)
 			{
+				std::vector<EleFace*> tmpFace;
+				tmpFace.push_back(*j);
+				tmpFace.push_back(*k);
 				std::vector<Vector3f*> tmpLine;
-				if (cal_intersection(*j, *k, tmpLine))
+				if (cal_intersection(tmpFace, tmpLine))
 				intersectLine_list.push_back(tmpLine);
 			}
 		}

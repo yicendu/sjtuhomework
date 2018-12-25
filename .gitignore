@@ -28,3 +28,5 @@
 /tools/Test_octree_building/.vs/Tree_test/v15
 /tools/Test_stl_loading/x64/Release
 /GUI_model_intersection/x64/Debug
+/tools/Test_face_pairing/x64/Release
+/tools/Test_latent_faces_searching/x64/Release

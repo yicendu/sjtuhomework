@@ -8,9 +8,12 @@
 #include "facepair.h"
 //octree is a cubic tree. Each length of its eages is the same.
 
+bool isRegionIntersected(Region a, Region b);
+
 class Octree
 {
 public:
+	Octree() {};
 	Octree(int depth, Region region, float min_length, int max_ele_num);
 	Octree(StlFile *stl, float min_length, int max_ele_num);
 	~Octree();
@@ -31,7 +34,6 @@ public:
 	Octree* getSubNodes(int i) { return m_sub_node[i]; }
 private:
 	void splitNode();
-	bool isIntersected(Region a, Region b);
 
 private:
 	int		m_depth;	// 0 means root
@@ -59,7 +61,7 @@ class might_intersected_faces_list
 public:
 	std::vector<might_intersected_faces*> m_i_f_list;
 	might_intersected_faces_list(Octree *nodeA, Octree *nodeB);
-	std::vector<vector<Vector3f*>> intersectLine_list;
+	std::vector<std::vector<Vector3f*>> intersectLine_list;
 
 private:
 	bool getMightIntersectedFaces(Octree *nodeA);

@@ -57,12 +57,20 @@ EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f v
 	EleFace::vertex0 = vertex0;
 	EleFace::vertex1 = vertex1;
 	EleFace::vertex2 = vertex2;
+	vertex[0] = vertex0;
+	vertex[1] = vertex1;
+	vertex[2] = vertex2;
+	for (int i = 0; i < 3; i++) {
+		edge[i].init(vertex[i], vertex[(i + 1) % 3]);
+	}
 	Vector3f region_min = min(vertex0, vertex1, vertex2);
 	Vector3f region_max = max(vertex0, vertex1, vertex2);
 	EleFace::region.x = region_min.x;
 	EleFace::region.y = region_min.y;
 	EleFace::region.z = region_min.z;
 	EleFace::region.length = max(region_max - region_min);
+	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
+	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
 	a = -1;
 	b = -1;
 	c = -1;
@@ -73,12 +81,20 @@ EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f v
 	EleFace::vertex0 = vertex0;
 	EleFace::vertex1 = vertex1;
 	EleFace::vertex2 = vertex2;
+	vertex[0] = vertex0;
+	vertex[1] = vertex1;
+	vertex[2] = vertex2;
+	for (int i = 0; i < 3; i++) {
+		edge[i].init(vertex[i], vertex[(i + 1) % 3]);
+	}
 	Vector3f region_min = min(vertex0, vertex1, vertex2);
 	Vector3f region_max = max(vertex0, vertex1, vertex2);
 	EleFace::region.x = region_min.x;
 	EleFace::region.y = region_min.y;
 	EleFace::region.z = region_min.z;
 	EleFace::region.length = max(region_max - region_min);
+	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
+	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
 	EleFace::a = a;
 	EleFace::b = b;
 	EleFace::c = c;
