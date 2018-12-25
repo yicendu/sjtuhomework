@@ -13,6 +13,7 @@ ModelIntersection::ModelIntersection(QWidget *parent)
 	connect(ui.deleteButton1, SIGNAL(clicked()), SLOT(deleteModelOne()));
 	connect(ui.previewButton2, SIGNAL(clicked()), SLOT(showModelTwo()));
 	connect(ui.deleteButton2, SIGNAL(clicked()), SLOT(deleteModelTwo()));
+	connect(ui.intersectButton, SIGNAL(clicked()), SLOT(onIntersection()));
 	connect(ui.pushButton_4, SIGNAL(clicked()), SLOT(onDisplayIntersection()));
 }
 void ModelIntersection::onFindLoadPath()
@@ -132,7 +133,11 @@ void ModelIntersection::deleteModelTwo()
 
 void ModelIntersection::onIntersection()
 {
-
+	QString tmp_name1 = ui.comboBox1->currentText();
+	QString tmp_path1 = ui.comboBox1->currentData().toString();
+	QString tmp_name2 = ui.comboBox2->currentText();
+	QString tmp_path2 = ui.comboBox2->currentData().toString();
+	ui.openGLWidget->intersection(tmp_name1, tmp_path1, tmp_name2, tmp_path2);
 }
 
 void ModelIntersection::onDisplayIntersection()

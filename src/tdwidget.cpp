@@ -19,7 +19,7 @@ void TDWidget::initializeGL()
 	GLfloat sunSp[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat sunDi[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//glShadeModel(GL_FLAT);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -75,12 +75,21 @@ void TDWidget::paintGL()
 		const Vector3f& pos1 = f.vertex0;
 		const Vector3f& pos2 = f.vertex1;
 		const Vector3f& pos3 = f.vertex2;
-		Vector3f normal = f.normal;
+		Vector3f normal = f.normal/ f.normal.L2Norm();
 		glNormal3f(normal.x, normal.y, normal.z);
 		glVertex3f(pos1.x, pos1.y, pos1.z);
 		glVertex3f(pos2.x, pos2.y, pos2.z);
 		glVertex3f(pos3.x, pos3.y, pos3.z);
 	}
+	glEnd();
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	//glLineWidth(10);
+		for (int i = 0; i < llist.size(); i++)
+		{
+			glVertex3f(llist[i][0]->x, llist[i][0]->y, llist[i][0]->z);
+			glVertex3f(llist[i][1]->x, llist[i][1]->y, llist[i][1]->z);
+		}
 	glEnd();
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
@@ -212,6 +221,22 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	return true;
 }
 
+bool TDWidget::intersection(QString fileName1, QString filePath1, QString fileName2, QString filePath2)
+{
+	fList.clear();
+	llist.clear();
+	loadObjObject(fileName1, filePath1);
+	loadObjObject(fileName2, filePath2);
+	SetBoundaryBox(stlFileMap[fileName1].MinCoord(), stlFileMap[fileName1].MaxCoord());
+	might_intersected_faces_list a_b(&octreeMap[fileName1], &octreeMap[fileName2]);
+	llist = a_b.intersectLine_list;
+	fList = stlFileMap[fileName1].faces;
+	fList.insert(fList.end(), stlFileMap[fileName2].faces.begin(), stlFileMap[fileName2].faces.end());
+	updateGL();
+	deleteFile(fileName1);
+	deleteFile(fileName2);
+	return true;
+}
 
 void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	double PI = 3.14159265358979323846;

@@ -30,3 +30,9 @@
 /GUI_model_intersection/x64/Debug
 /tools/Test_face_pairing/x64/Release
 /tools/Test_latent_faces_searching/x64/Release
+/x64/Debug
+/tools/Test_stl_loading/Debug
+/tools/Test_stl_intersection/Debug
+/tools/Test_octree_building/Debug
+/tools/Test_latent_faces_searching/Debug
+/tools/Test_face_pairing/Win32/Debug
