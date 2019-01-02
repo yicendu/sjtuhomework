@@ -14,12 +14,12 @@ TDWidget::~TDWidget()
 
 void TDWidget::initializeGL()
 {
-	GLfloat light0Position[] = { 0.0f, 0.0f, 0.0f, 1.f };
-	GLfloat sunAm[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat sunSp[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat sunDi[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat light0Position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//GLfloat sunAm[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//GLfloat sunSp[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//GLfloat sunDi[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//glShadeModel(GL_FLAT);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -27,10 +27,12 @@ void TDWidget::initializeGL()
 	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 	glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, sunAm);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, sunDi);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, sunSp);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, sunAm);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, sunDi);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, sunSp);
 	glEnable(GL_LIGHT0);
+	/*GLfloat gAmbient[] = { 0.6, 0,6, 0,6, 1.0 };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gAmbient);*/
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
@@ -44,7 +46,7 @@ void TDWidget::paintGL()
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}
-		
+	GLfloat width = 1;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -63,28 +65,46 @@ void TDWidget::paintGL()
 	glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
 	//glShadeModel(GL_FLAT);
 	glEnable(GL_LIGHTING);
-	glColor3f(0.4, 0.4, 1.0);
+	glColor4f(0.4, 0.4, 1.0,0.8);
 	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+
+	glEnable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLES);
 	glFrontFace(GL_CCW);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for (size_t i = 0; i < fList.size(); i++) {
 		
 		EleFace f = fList[i];
 		const Vector3f& pos1 = f.vertex0;
 		const Vector3f& pos2 = f.vertex1;
 		const Vector3f& pos3 = f.vertex2;
-		Vector3f normal = f.normal;
+		Vector3f normal = f.normal/ f.normal.L2Norm();
 		glNormal3f(normal.x, normal.y, normal.z);
 		glVertex3f(pos1.x, pos1.y, pos1.z);
 		glVertex3f(pos2.x, pos2.y, pos2.z);
 		glVertex3f(pos3.x, pos3.y, pos3.z);
 	}
 	glEnd();
+	glColor4f(1.0, 0.3, 0.3,1.0);
+	
+	glDisable(GL_DEPTH_TEST);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonOffset(-1.0, -1.0);
+	glEnable(GL_LINE_SMOOTH);
+	width = 5.0;
+	glLineWidth(width);
+	glBegin(GL_LINES);
+	for (int i = 0; i < llist.size(); i++)
+	{
+		glVertex3f(llist[i][0]->x, llist[i][0]->y, llist[i][0]->z);
+		glVertex3f(llist[i][1]->x, llist[i][1]->y, llist[i][1]->z);
+	}
+	glEnd();
+
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 
@@ -173,7 +193,7 @@ void TDWidget::mouseMoveEvent(QMouseEvent *e)
 		LastX = e->x();
 		LastY = e->y();
 
-		GLfloat sensitivity = 0.01f;    //移动时的灵敏度  
+		GLfloat sensitivity = (zFar-zNear)/10000;    //移动时的灵敏度  
 		xoffset *= sensitivity;
 		yoffset *= sensitivity;
 
@@ -187,11 +207,12 @@ void TDWidget::mouseMoveEvent(QMouseEvent *e)
 void TDWidget::wheelEvent(QWheelEvent *e)
 {
 	// 当滚轮远离使用者时
+	GLfloat sensitivity = (zFar - zNear) / 300;
 	if (e->delta() > 0) {
-		mdepth += (double)e->delta()/100;
+		mdepth += (double)e->delta()/ sensitivity;
 	}
 	else {//当滚轮向使用者方向旋转时
-		mdepth += (double)e->delta()/100;
+		mdepth += (double)e->delta()/ sensitivity;
 	}
 	updateGL();
 }
@@ -212,6 +233,22 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	return true;
 }
 
+bool TDWidget::intersection(QString fileName1, QString filePath1, QString fileName2, QString filePath2)
+{
+	fList.clear();
+	llist.clear();
+	loadObjObject(fileName1, filePath1);
+	loadObjObject(fileName2, filePath2);
+	SetBoundaryBox(stlFileMap[fileName1].MinCoord(), stlFileMap[fileName1].MaxCoord());
+	might_intersected_faces_list a_b(&octreeMap[fileName1], &octreeMap[fileName2]);
+	llist = a_b.intersectLine_list;
+	fList = stlFileMap[fileName1].faces;
+	fList.insert(fList.end(), stlFileMap[fileName2].faces.begin(), stlFileMap[fileName2].faces.end());
+	updateGL();
+	deleteFile(fileName1);
+	deleteFile(fileName2);
+	return true;
+}
 
 void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	double PI = 3.14159265358979323846;

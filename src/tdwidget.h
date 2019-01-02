@@ -32,6 +32,7 @@ public Q_SLOTS:
 	void selectFile(QString fileName , QString filePath);
 	void deleteFile(QString fileName);
 	void showAllFile(QStringList fileName, QStringList filePath, int COI=0);
+	bool intersection(QString fileName1, QString filePath1, QString fileName2, QString filePath2);
 
 protected:
 
@@ -42,6 +43,8 @@ protected:
   void mousePressEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void wheelEvent(QWheelEvent *e);
+
+ 
   
 
 protected:
@@ -62,6 +65,7 @@ private:
    std::map<QString, StlFile> stlFileMap;
    std::map<QString, Octree> octreeMap;
    FaceList fList;
+   std::vector<std::vector<Vector3f*>> llist;
   
    //投影参数
    int winWidth, winHeight;                            // window width and height
