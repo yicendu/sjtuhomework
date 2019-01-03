@@ -15,13 +15,13 @@ int main(int argc, char** argv)
 	//	return 1;
 	//}
 
-	StlFile stl_1 = slt_read("../rabbit.stl");
-	StlFile stl_2 = slt_read("../yellowcat.stl");
+	StlFile stl_1 = slt_read("../models/rabbit.stl");
+	StlFile stl_2 = slt_read("../models/yellowcat.stl");
 	Octree root1(&stl_1, 5, 5);
 	Octree root2(&stl_2, 5, 5);
 
-	might_intersected_faces_list a_b(&root1, &root2);
-	std::cout << a_b.intersectLine_list.size();
+	
+	std::cout << search_inter_lines(&root1, &root2).size();
 	//for (int i = 0; i < a_b.intersectLine_list.size(); i++) {
 	//	std::cout << *(a_b.intersectLine_list[i][0]) << endl << *(a_b.intersectLine_list[i][1]) << endl;
 	//}

@@ -1,5 +1,9 @@
 #pragma once
-#include "octree.h"
-#include "vector3.h"
 
-bool cal_intersection(std::vector<EleFace*> t, std::vector<Vector3f*> &point);
+#include <vector>
+#include <vector3.h>
+class Octree;
+class EleFace;
+typedef std::vector<std::vector<Vector3f*>> LineVector;
+bool cal_intersection(EleFace tria[2], std::vector<Vector3f*> &point);
+LineVector search_inter_lines(Octree *nodeA, Octree *nodeB);

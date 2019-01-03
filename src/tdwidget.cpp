@@ -240,8 +240,7 @@ bool TDWidget::intersection(QString fileName1, QString filePath1, QString fileNa
 	loadObjObject(fileName1, filePath1);
 	loadObjObject(fileName2, filePath2);
 	SetBoundaryBox(stlFileMap[fileName1].MinCoord(), stlFileMap[fileName1].MaxCoord());
-	might_intersected_faces_list a_b(&octreeMap[fileName1], &octreeMap[fileName2]);
-	llist = a_b.intersectLine_list;
+	llist = search_inter_lines(&octreeMap[fileName1], &octreeMap[fileName2]);
 	fList = stlFileMap[fileName1].faces;
 	fList.insert(fList.end(), stlFileMap[fileName2].faces.begin(), stlFileMap[fileName2].faces.end());
 	updateGL();

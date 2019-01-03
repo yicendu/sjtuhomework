@@ -1,9 +1,9 @@
+#include "octree.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <algorithm>
 #include <iterator>
-#include "octree.h"
 
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
@@ -22,7 +22,6 @@ bool isRegionIntersected(Region a, Region b)
 
 Octree::Octree(int depth, Region region, float min_length, int max_ele_num)
 {
-	m_count = 0;
 	m_depth = depth;
 	m_region = region;
 	m_min_length = min_length;
@@ -49,7 +48,7 @@ Octree::Octree(StlFile *stl, float min_length, int max_ele_num)
 		else if (stl->vertices[i].z > max_z) max_z = stl->vertices[i].z;
 	}
 	float region_length = max(max(max_x - min_x, max_y - min_y), max_z - min_z);
-	m_count = 0;
+
 	m_is_leaf = true;
 	memset(m_sub_node, NULL, sizeof(m_sub_node));
 	m_depth = 0;
@@ -146,108 +145,4 @@ std::set<EleFace*> Octree::queryEles(Region region) {
 		eles = temp;
 	}
 	return eles;
-}
-
-bool Octree::findIntersectedNode(Octree *nodeB)
-{
-	if (!isRegionIntersected(this->m_region, nodeB->m_region))
-		return false;
-	else
-		m_intersected_node.push_back(nodeB);
-
-	if (m_is_leaf && nodeB->m_is_leaf)
-		return true;
-
-	if (m_is_leaf && !nodeB->m_is_leaf)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			findIntersectedNode(nodeB->m_sub_node[j]);
-		}
-	}
-
-	if (!m_is_leaf && nodeB->m_is_leaf)
-	{
-		for (int i = 0; i < 8; i++)
-		{
-			m_sub_node[i]->findIntersectedNode(nodeB);
-		}
-	}
-
-	if (!m_is_leaf && !nodeB->m_is_leaf)
-	{
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				m_sub_node[i]->findIntersectedNode(nodeB->m_sub_node[j]);
-			}
-		}
-	}
-	return true;
-}
-
-
-might_intersected_faces_list::might_intersected_faces_list(Octree *nodeA, Octree *nodeB)
-{
-	nodeA->findIntersectedNode(nodeB);
-	getMightIntersectedFaces(nodeA);
-	fillIintersectLineList();
-}
-
-bool might_intersected_faces_list::getMightIntersectedFaces(Octree *nodeA)
-{
-
-	if (nodeA->isLeaf())
-	{
-		if (nodeA->getEles().empty())
-		{
-			return false;
-		}
-		might_intersected_faces *tmp = new might_intersected_faces();
-		tmp->a_eles = nodeA->getEles();
-		size_t i = 0;
-		for (i = 0; i < nodeA->m_intersected_node.size(); i++)
-		{
-			if (nodeA->m_intersected_node[i]->isLeaf())
-			{
-				std::set<EleFace*> tmp_b_eles = nodeA->m_intersected_node[i]->getEles();
-				tmp->b_eles.insert(tmp_b_eles.begin(), tmp_b_eles.end());
-			}
-		}
-		m_i_f_list.push_back(tmp);
-		return true;
-	}
-	else
-	{
-		for (int i = 0; i < 8; i++)
-			getMightIntersectedFaces(nodeA->getSubNodes(i));
-	}
-	return true;
-}
-
-bool might_intersected_faces_list::fillIintersectLineList()
-{
-	size_t i = 0;
-	for (i = 0; i < m_i_f_list.size(); i++)
-	{
-		/*auto j = m_i_f_list[i]->a_eles.begin();*/
-		for (auto j = m_i_f_list[i]->a_eles.begin(); j != m_i_f_list[i]->a_eles.end(); j++)
-		{
-			/*size_t k = 0;*/
-			for (auto k = m_i_f_list[i]->b_eles.begin(); k != m_i_f_list[i]->b_eles.end(); k++)
-			{
-				std::vector<EleFace*> tmpFace;
-				tmpFace.push_back(*j);
-				tmpFace.push_back(*k);
-				std::vector<Vector3f*> tmpLine;
-				if (cal_intersection(tmpFace, tmpLine))
-				intersectLine_list.push_back(tmpLine);
-			}
-		}
-	}
-	if (intersectLine_list.empty())
-		return false;
-	else
-		return true;
 }

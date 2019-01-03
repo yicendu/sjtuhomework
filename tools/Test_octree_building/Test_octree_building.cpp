@@ -62,7 +62,6 @@ int main(int argc, char** argv)
 	StlFile stl = slt_read(argv[1]);
 
 	Octree root0(&stl, 5, 5);
-
 	{
 		Region test;
 		test.x = -59;

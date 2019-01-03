@@ -155,6 +155,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\facepair.h" />
     <ClInclude Include="..\..\src\octree.h" />
+    <ClInclude Include="..\..\src\stlloading.h" />
     <ClInclude Include="..\..\src\vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
