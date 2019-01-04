@@ -13,6 +13,7 @@ ModelIntersection::ModelIntersection(QWidget *parent)
 	connect(ui.deleteButton1, SIGNAL(clicked()), SLOT(deleteModelOne()));
 	connect(ui.previewButton2, SIGNAL(clicked()), SLOT(showModelTwo()));
 	connect(ui.deleteButton2, SIGNAL(clicked()), SLOT(deleteModelTwo()));
+	connect(ui.intersectButton, SIGNAL(clicked()), SLOT(onIntersection()));
 	connect(ui.pushButton_4, SIGNAL(clicked()), SLOT(onDisplayIntersection()));
 }
 void ModelIntersection::onFindLoadPath()
@@ -132,23 +133,44 @@ void ModelIntersection::deleteModelTwo()
 
 void ModelIntersection::onIntersection()
 {
-
+	if (ui.comboBox1->currentIndex() < 0 || ui.comboBox2->currentIndex() < 0|| ui.comboBox1->currentIndex()== ui.comboBox2->currentIndex())
+	{
+		QMessageBox::critical(0,
+			"critical message", "Please select model 1!",
+			QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox::Cancel | QMessageBox::Escape, 0);
+	}
+	else {
+		QString tmp_name1 = ui.comboBox1->currentText();
+		QString tmp_path1 = ui.comboBox1->currentData().toString();
+		QString tmp_name2 = ui.comboBox2->currentText();
+		QString tmp_path2 = ui.comboBox2->currentData().toString();
+		ui.openGLWidget->intersection(tmp_name1, tmp_path1, tmp_name2, tmp_path2);
+	}
 }
 
 void ModelIntersection::onDisplayIntersection()
 {
-	QStringList fileName;
-	QStringList filePath;
-	QString tmp_name = ui.comboBox1->currentText();
-	QString tmp_path = ui.comboBox1->currentData().toString();
-	fileName<<tmp_name;
-	filePath<<tmp_path;
+	if (ui.comboBox1->currentIndex() < 0||ui.comboBox2->currentIndex() < 0||ui.comboBox1->currentIndex() == ui.comboBox2->currentIndex())
+	{
+		QMessageBox::critical(0,
+			"critical message", "Please select correct model!",
+			QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox::Cancel | QMessageBox::Escape, 0);
+	}
+	else {
+		QStringList fileName;
+		QStringList filePath;
+		QString tmp_name = ui.comboBox1->currentText();
+		QString tmp_path = ui.comboBox1->currentData().toString();
+		fileName << tmp_name;
+		filePath << tmp_path;
 
-	tmp_name = ui.comboBox2->currentText();
-	tmp_path = ui.comboBox2->currentData().toString();
-	fileName<<tmp_name;
-	filePath<<tmp_path;
-	
-	ui.openGLWidget->showAllFile(fileName, filePath);
+		tmp_name = ui.comboBox2->currentText();
+		tmp_path = ui.comboBox2->currentData().toString();
+		fileName << tmp_name;
+		filePath << tmp_path;
 
+		ui.openGLWidget->showAllFile(fileName, filePath);
+	}
 }
