@@ -18,7 +18,7 @@ int main()
 		vertex[0] = { i,i,0 };
 		vertex[1] = { i,k,0 };
 		vertex[2] = { k,i,0 };
-		EleFace *tmpEle=new EleFace(normal, vertex[0], vertex[1], vertex[2]);
+		EleFace *tmpEle = new EleFace(normal, vertex[0], vertex[1], vertex[2]);
 		tree_a.insertEle(tmpEle);
 	}
 
@@ -35,7 +35,7 @@ int main()
 		tree_b.insertEle(tmpEle);
 	}
 	
-	might_intersected_faces_list a_b(&tree_a, &tree_b);
+	std::cout << search_inter_lines(&tree_a, &tree_b).size();
 	
 	return 0;
 }

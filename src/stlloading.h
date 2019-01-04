@@ -1,15 +1,11 @@
 #pragma once
-
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include "Vector3.h"
-#include <cmath>
-#include <algorithm>
-
 #define NULL 0
 
-
+#include "Vector3.h"
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+class vector;
 
 class Region {
 public:
@@ -48,9 +44,9 @@ public:
 
 class EleFace {
 public:
-	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2);
+	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index=0);
 	// I am not sure whether we need the index of the vertexes in the stl instance.
-	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int a, int b, int c);
+	EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index, int a, int b, int c);
 	EleFace(){}
 
 public:
@@ -60,6 +56,7 @@ public:
 	Vector3f vertex2;
 	Vector3f vertex[3];
 	Edge edge[3];
+	int index;
 	int a;
 	int b;
 	int c;

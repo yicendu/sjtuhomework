@@ -1,8 +1,9 @@
-#include "stlloading.h"
-#include <iostream>
+#include "facepair.h"
 #include "octree.h"
 #include "vector3.h"
 #include <vector>
+#include <iostream>
+
 #define epsilon 1e-9
 
 #ifndef __min
@@ -52,6 +53,77 @@ bool is_all_NoIntersection(IntersectionStatus *array, int size) {
 	return true;
 }
 
+union map_index
+{
+	long long index;
+	struct
+	{
+		int index_a;
+		int index_b;
+	};
+};
+
+// TODO@Dianxin: The bool value is not used. 
+bool findIntersectedNode(Octree *nodeA, Octree *nodeB, std::vector<pair_octree> &pair_octree_vector)
+{
+	if (!isRegionIntersected(nodeA->m_region, nodeB->m_region)) {
+		return false;
+	}
+
+	if (nodeA->m_is_leaf && nodeB->m_is_leaf) {
+		if (nodeA->m_eles.size() == 0 || nodeB->m_eles.size() == 0) {
+			return false;
+		}
+		pair_octree_vector.push_back(pair_octree(nodeA, nodeB));
+		return true;
+	}
+
+	if (nodeA->m_is_leaf || (!nodeB->m_is_leaf && (nodeA->m_region.length < nodeB->m_region.length)))
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			findIntersectedNode(nodeA, nodeB->m_sub_node[j], pair_octree_vector);
+		}
+	}
+	else {
+		for (int i = 0; i < 8; i++)
+		{
+			findIntersectedNode(nodeA->m_sub_node[i], nodeB, pair_octree_vector);
+		}
+	}
+	return true;
+}
+
+
+LineVector search_inter_lines(Octree *nodeA, Octree *nodeB)
+{
+	std::vector<pair_octree> pair_octree_vector;
+	findIntersectedNode(nodeA, nodeB, pair_octree_vector);
+	std::unordered_map<long long, bool> is_existed;
+	std::vector<std::vector<Vector3f*>> inter_lines;
+
+	for (int i = 0; i < pair_octree_vector.size(); i++) {
+
+		std::set<EleFace *> &elefaceA = pair_octree_vector[i].a->m_eles;
+		std::set<EleFace *> &elefaceB = pair_octree_vector[i].b->m_eles;
+
+		for (auto it_a = elefaceA.begin(); it_a != elefaceA.end(); it_a++) {
+			for (auto it_b = elefaceB.begin(); it_b != elefaceB.end(); it_b++) {
+				if (isRegionIntersected((*it_a)->region, (*it_b)->region)) {
+					EleFace temp_tria[2] = { **it_a , **it_b };
+					std::vector<Vector3f* > temp_list;
+					map_index index;
+					index.index_a = (*it_a)->index;
+					index.index_b = (*it_b)->index;
+					if (cal_intersection(temp_tria, temp_list)) {
+						inter_lines.push_back(temp_list);
+					}
+				}
+			}
+		}
+	}
+	return inter_lines;
+}
 
 /*
  * If both two vertexes of va_2, va_b are on the plane that tria face defined (with one-line intersection), 
@@ -341,14 +413,7 @@ bool calculate_intersect_point_colplanar(Edge edge, EleFace &tria,std::vector<Ve
 calculate intersection segment line of t1 and t2;
 t1,t2 are two input triangles;
 */
-bool cal_intersection(std::vector<EleFace*> t, std::vector<Vector3f*> &point) {
-
-	EleFace tria[2] = { *t[0], *t[1] };
-	//If the AABB box of triangles are seperated, return false.
-	if (!isRegionIntersected(tria[0].region, tria[1].region)) {
-		return false;
-	}
-
+bool cal_intersection(EleFace tria[2], std::vector<Vector3f*> &point) {
 	//ROUGHLY: judge whether each edge of tria[j] is at the same side of tria[j+1] plane
 	IntersectionStatus inters_status[2][3] = {NoIntersection};
 	for (int j = 0; j < 2; j++) {

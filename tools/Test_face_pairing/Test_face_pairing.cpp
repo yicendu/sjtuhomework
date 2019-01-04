@@ -22,9 +22,7 @@ int main()
 	Vector3f c_v3(0, 0, 1);
 	EleFace c(c_normal, c_v1, c_v2, c_v3);
 
-	std::vector<EleFace*> Face;
-	Face.push_back(&a);
-	Face.push_back(&c);
+	EleFace Face[2] = { a, b };
 	std::vector<Vector3f*> ans;
 	cal_intersection(Face, ans);
 	std::cout << *ans[0] << std::endl <<* ans[1];

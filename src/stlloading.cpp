@@ -1,4 +1,6 @@
 #include "stlloading.h"
+#include <string>
+#include "Vector3.h"
 #include <iostream>
 #include <fstream>
 
@@ -28,6 +30,7 @@ StlFile slt_read(const char* name) {
 	std::string line;
 	getline(file, line);
 
+	int face_index = 0;
 	while (true) {
 		file >> line;
 		if (line == "endsolid") {
@@ -39,7 +42,8 @@ StlFile slt_read(const char* name) {
 		Vector3f B = readVector3D(file);
 		Vector3f C = readVector3D(file);
 		EleFace face(normal, A, B, C, 
-					 stl.getVector(A), stl.getVector(B), stl.getVector(C));
+					 stl.getVector(A), stl.getVector(B), stl.getVector(C), face_index);
+		face_index += 1;
 		stl.faces.push_back(face);
 		getline(file, line);
 		getline(file, line);
@@ -52,7 +56,7 @@ StlFile slt_read(const char* name) {
 
 // I am not sure whether we need the index of the vertexes in the stl instance.
 
-EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index) {
 	EleFace::normal = normal;
 	EleFace::vertex0 = vertex0;
 	EleFace::vertex1 = vertex1;
@@ -71,12 +75,13 @@ EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f v
 	EleFace::region.length = max(region_max - region_min);
 	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
 	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
+	EleFace::index = index;
 	a = -1;
 	b = -1;
 	c = -1;
 }
 
-EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int a, int b, int c) {
+EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index, int a, int b, int c) {
 	EleFace::normal = normal;
 	EleFace::vertex0 = vertex0;
 	EleFace::vertex1 = vertex1;
@@ -95,6 +100,7 @@ EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f v
 	EleFace::region.length = max(region_max - region_min);
 	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
 	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
+	EleFace::index = index;
 	EleFace::a = a;
 	EleFace::b = b;
 	EleFace::c = c;
