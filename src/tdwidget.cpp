@@ -30,9 +30,15 @@ void TDWidget::initializeGL()
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, sunAm);
 	//glLightfv(GL_LIGHT0, GL_DIFFUSE, sunDi);
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, sunSp);
+	GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glEnable(GL_LIGHT0);
-	/*GLfloat gAmbient[] = { 0.6, 0,6, 0,6, 1.0 };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gAmbient);*/
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
@@ -57,17 +63,71 @@ void TDWidget::paintGL()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//glTranslatef(0.0, 0.0, -6.0);
-	glTranslatef(xpan, ypan, -sdepth);
-	glTranslatef(transVec[0], transVec[1], transVec[2]);
-	glTranslatef(0,0, mdepth);
-	glRotatef(pitch, 1.0, 0.0, 0.0);
-	glRotatef(yaw, 0.0, 1.0, 0.0);
-	glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
-	//glShadeModel(GL_FLAT);
-	glEnable(GL_LIGHTING);
-	glColor4f(0.4, 0.4, 1.0,0.8);
-	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	//glTranslatef(xpan, ypan, -sdepth);
 
+	//glTranslatef(transVec[0] - transVec_old[0], transVec[1] - transVec_old[1], transVec[2] - transVec_old[2]);
+	//glTranslatef(0, 0, mdepth-mdepth_old);
+	//glRotatef(pitch- pitch_old, 1.0, 0.0, 0.0);
+	//glRotatef(yaw-yaw_old, 0.0, 1.0, 0.0);
+	//glTranslatef(0, 0, -(transVec[2] + mdepth));
+	//glRotatef(pitch, 1.0, 0.0, 0.0);
+	//glRotatef(yaw, 0.0, 1.0, 0.0);
+	//glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
+	//glShadeModel(GL_FLAT);
+
+	/*这里是坐标系转换的表达，现在是绕视野中心旋转，
+	如果你只想绕物体自身中心旋转，就把后面的代码注释掉（注释到坐标转换结束的位置），并去掉下面四行代码的注释*/
+	//glTranslatef(transVec[0], transVec[1], transVec[2] + mdepth);
+	//glRotatef(pitch, 1.0, 0.0, 0.0);
+	//glRotatef(yaw, 0.0, 1.0, 0.0);
+	//glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
+	if (m_flag)
+	{
+		glTranslatef(transVec[0], transVec[1], transVec[2] + mdepth);
+		//glTranslatef(0, 0, mdepth);
+
+		glRotatef(pitch, 1.0, 0.0, 0.0);
+		glRotatef(yaw, 0.0, 1.0, 0.0);
+
+		glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
+		glGetFloatv(GL_MODELVIEW_MATRIX, model);
+	}
+	glLoadIdentity();
+	if(!m_flag)
+		glTranslatef(transVec[0] - transVec_old[0], transVec[1] - transVec_old[1], transVec[2] - transVec_old[2] + mdepth - mdepth_old);
+	glTranslatef(0, 0, (transVec_old[2] + mdepth_old));
+	glRotatef(pitch- pitch_old, 1.0, 0.0, 0.0);
+	glRotatef(yaw- yaw_old, 0.0, 1.0, 0.0);
+	glTranslatef(0, 0, -(transVec_old[2] + mdepth_old));
+	glMultMatrixf(model);
+	m_flag = false;
+	glGetFloatv(GL_MODELVIEW_MATRIX, model);
+
+
+	transVec_old = transVec;
+	mdepth_old = mdepth;
+	yaw_old = yaw;
+	pitch_old = pitch;
+	/*坐标转换结束*/
+
+	glEnable(GL_LIGHTING);
+	
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	//glBegin(GL_LINES);
+	////glColor4f(0, 0, 0, 1);
+	//glVertex3f(0, 0, 0);
+	//glVertex3f(g_center[0], g_center[1], g_center[2]);
+	//glVertex3f(g_center[0], g_center[1], g_center[2]);
+	//glVertex3f(transVec[0], transVec[1],0);
+	//glVertex3f(0, 0, 0);
+	//glColor4f(1, 0, 0, 1);
+	//glVertex3f(100, 0, 0);
+	//glColor4f(0, 1, 0 , 1);
+	//glVertex3f(0, 0, 0);
+	//glColor4f(0, 0, 1.0, 1);
+	//glVertex3f(0, 0, 100);
+	//glEnd();
+	glColor4f(0.4, 0.4, 1.0, 0.8);
 	glEnable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLES);
 	glFrontFace(GL_CCW);
@@ -86,7 +146,7 @@ void TDWidget::paintGL()
 		glVertex3f(pos3.x, pos3.y, pos3.z);
 	}
 	glEnd();
-	glColor4f(1.0, 0.3, 0.3,1.0);
+	glColor4f(0.0, 0.0, 0.0,1.0);
 	
 	glDisable(GL_DEPTH_TEST);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -193,12 +253,12 @@ void TDWidget::mouseMoveEvent(QMouseEvent *e)
 		LastX = e->x();
 		LastY = e->y();
 
-		GLfloat sensitivity = (zFar-zNear)/10000;    //移动时的灵敏度  
+		GLfloat sensitivity = (zFar-zNear)/geometry().width()/30;    //移动时的灵敏度  
 		xoffset *= sensitivity;
 		yoffset *= sensitivity;
 
 		//仅需在x-y平面内移动即可  
-		transVec += QVector3D(xoffset, -yoffset, 0.0f);
+		transVec += QVector3D(xoffset, -yoffset, 0.f);
 	}
 
 	updateGL();
@@ -207,7 +267,7 @@ void TDWidget::mouseMoveEvent(QMouseEvent *e)
 void TDWidget::wheelEvent(QWheelEvent *e)
 {
 	// 当滚轮远离使用者时
-	GLfloat sensitivity = (zFar - zNear) / 300;
+	GLfloat sensitivity = (zFar - zNear) / 700;
 	if (e->delta() > 0) {
 		mdepth += (double)e->delta()/ sensitivity;
 	}
@@ -254,18 +314,34 @@ void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	double PI = 3.14159265358979323846;
 	double radius = (bmax - bmin).L2Norm();
 	g_center = 0.5 * (bmin + bmax);
-	zNear = 0.2 * radius / sin(0.5 * g_fov * PI / 180.0);
+	zNear = 0.3 * radius / sin(0.5 * g_fov * PI / 180.0);
 	zFar = zNear + 2.0 * radius;
 	g_sdepth = zNear + radius;
-	zNear *= 0.1;
+	zNear *= 0.05;
 	zFar *= 10;
 	sdepth = g_sdepth;
+	transVec[2] = -sdepth;
+	m_flag = true;
 }
 
 void TDWidget::hideIt()
 {
 	hide = !hide;
 	updateGL();
+}
+
+inline Vector3f minVector3f(Vector3f a, Vector3f b)
+{
+	return Vector3f(std::min(a.x, b.x),
+		std::min(a.y, b.y),
+		std::min(a.z, b.z));
+}
+
+inline Vector3f maxVector3f(Vector3f a, Vector3f b)
+{
+	return Vector3f(std::max(a.x, b.x),
+		std::max(a.y, b.y),
+		std::max(a.z, b.z));
 }
 
 void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
@@ -279,7 +355,15 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 		else
 			fList.insert(fList.end(), stlFileMap[fileName[i]].faces.begin(), stlFileMap[fileName[i]].faces.end());
 	}
-	SetBoundaryBox(stlFileMap[fileName[COI]].MinCoord(), stlFileMap[fileName[COI]].MaxCoord());
+	Vector3f mincoord= stlFileMap[fileName[COI]].MinCoord();
+	Vector3f maxcoord= stlFileMap[fileName[COI]].MaxCoord();
+	for (int i = 0; i < fileName.size(); i++)
+	{
+		mincoord = minVector3f(mincoord, stlFileMap[fileName[i]].MinCoord());
+		maxcoord = maxVector3f(maxcoord, stlFileMap[fileName[i]].MaxCoord());
+	}
+
+	SetBoundaryBox(mincoord, maxcoord);
 	//SetBoundaryBox(octreeMap[fileName[COI]].m_region.min, octreeMap[fileName[COI]].m_region.max);
 	updateGL();
 	stlFileMap.clear();

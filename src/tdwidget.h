@@ -58,8 +58,14 @@ private:
    int LastY = 0;
    double yaw=0;
    double pitch=0;
+   double yaw_old = 0;
+   double pitch_old = 0;
    QVector3D transVec = QVector3D(0.0f, 0.0f, 0.0f);
+   QVector3D transVec_old = QVector3D(0.0f, 0.0f, 0.0f);
    double mdepth=0;
+   double mdepth_old = 0;
+   GLfloat model[16];
+   bool m_flag = true;
 
    //¼ÇÂ¼Ä£ÐÍ
    std::map<QString, StlFile> stlFileMap;
@@ -73,7 +79,7 @@ private:
    double sdepth = 10;
    double xpan = 0.0, ypan = 0.0;                      
    double zNear = 1.0, zFar = 100.0;                  
-   double g_fov = 45.0;
+   double g_fov = 15;
    double g_sdepth;
    Vector3f g_center;
 };

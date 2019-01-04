@@ -17,6 +17,12 @@
    <layout class="QGridLayout" name="gridLayout_4" rowstretch="1,3,1,2" columnstretch="5,2">
     <item row="3" column="1">
      <widget class="QFrame" name="frame">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -24,6 +30,19 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="maximumSize">
+          <size>
+           <width>20000</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>显示</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="intersectButton">
          <property name="maximumSize">
@@ -37,24 +56,17 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="maximumSize">
-          <size>
-           <width>20000</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>输出</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QGroupBox" name="gridGroupBox_2">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>选择模型</string>
       </property>
@@ -87,6 +99,12 @@
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>模型1</string>
          </property>
@@ -105,6 +123,12 @@
            <width>16777215</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>14</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>模型2</string>
@@ -130,6 +154,12 @@
     </item>
     <item row="3" column="0">
      <widget class="QGroupBox" name="horizontalGroupBox">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>原始模型</string>
       </property>
@@ -150,6 +180,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="title">
        <string>载入模型</string>
@@ -177,6 +213,12 @@
     </item>
     <item row="0" column="0" rowspan="3">
      <widget class="QGroupBox" name="gridGroupBox1">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>工作区</string>
       </property>
@@ -189,6 +231,12 @@
     </item>
     <item row="2" column="1">
      <widget class="QGroupBox" name="groupBox">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>信息</string>
       </property>
@@ -207,7 +255,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
