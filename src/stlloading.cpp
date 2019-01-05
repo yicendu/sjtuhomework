@@ -15,21 +15,20 @@ Vector3f readVector3D(std::istream& is) {
 }
 
 // Warning!This method doesn't check the format of the stl file.
-StlFile slt_read(const char* name) {
-
-	StlFile stl;
+int StlFile::stl_read(const char* name) {
 
 	std::ifstream file;
 	file.open(name);
 	if (!file.is_open()) {
 		std::cerr << "Unable to open " << name << std::endl;
-		return stl;
+		return 0;
 	}
-	std::cout << "Warning!This stl reading doesn't check the format of the stl file.";
-
 	std::string line;
 	getline(file, line);
-
+	if (line != "solid 0")
+		std::cerr << "The file \"" << name << "\" format is wrong!" << std::endl;
+		return -1;
+	std::cout << line;
 	int face_index = 0;
 	while (true) {
 		file >> line;
@@ -42,16 +41,17 @@ StlFile slt_read(const char* name) {
 		Vector3f B = readVector3D(file);
 		Vector3f C = readVector3D(file);
 		EleFace face(normal, A, B, C, 
-					 stl.getVector(A), stl.getVector(B), stl.getVector(C), face_index);
+					 getVector(A), getVector(B), getVector(C), face_index);
 		face_index += 1;
-		stl.faces.push_back(face);
+		faces.push_back(face);
 		getline(file, line);
 		getline(file, line);
 	}
 
-	std::cout << "Read successfully!";
+	std::cout << "Read successfully!" << std::endl;
 	file.close();
-	return stl;
+	_isopen = true;
+	return 1;
 }
 
 // I am not sure whether we need the index of the vertexes in the stl instance.

@@ -288,7 +288,8 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	char tmp[100];
 	QByteArray c = filePath.toLocal8Bit();
 	strcpy(tmp, c.data());
-	stlFileMap[fileName] = slt_read(tmp);
+	StlFile stl;
+	stlFileMap[fileName] = stl;
 	octreeMap[fileName] = Octree(&stlFileMap[fileName], 2.f,10);
 	return true;
 }

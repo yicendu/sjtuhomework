@@ -15,8 +15,10 @@ int main(int argc, char** argv)
 	//	return 1;
 	//}
 
-	StlFile stl_1 = slt_read("../models/rabbit.stl");
-	StlFile stl_2 = slt_read("../models/yellowcat.stl");
+	StlFile stl_1;
+	StlFile stl_2;
+	stl_1.stl_read("../models/rabbit.stl");
+	stl_2.stl_read("../models/yellowcat.stl");
 	Octree root1(&stl_1, 5, 5);
 	Octree root2(&stl_2, 5, 5);
 

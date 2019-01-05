@@ -191,7 +191,6 @@
     <ClCompile Include="modelintersection.cpp" />
     <ClCompile Include="octree.cpp" />
     <ClCompile Include="stlloading.cpp" />
-    <ClCompile Include="stlrender.cpp" />
     <ClCompile Include="tdwidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -204,7 +203,6 @@
     <ClInclude Include="vector3.h" />
     <ClInclude Include="octree.h" />
     <ClInclude Include="stlloading.h" />
-    <ClInclude Include="stlrender.h" />
     <QtMoc Include="tdwidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_DEPRECATED_WARNINGS;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB</Define>
