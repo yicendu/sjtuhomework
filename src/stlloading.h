@@ -70,8 +70,23 @@ public:
 	std::vector<Vector3f> vertices;
 	std::unordered_map<Vector3f, int> indexMap;
 	std::vector<EleFace> faces;
+private:
+	bool _isopen;
+public:
+	/* If the file is not stl standard file in ASCII format,
+	*  it will cause error in open a file.
+    *  return 1, if everything is right.
+	*  return 0, if there is no such a file.
+	*  return -1, if the format is not right.
+	*/
+	int stl_read(const char* name);
+	StlFile() {
+		_isopen = false;
+	}
 
-
+	bool isopen() {
+		return _isopen;
+	}
 	inline Vector3f minVector3f(Vector3f a, Vector3f b)
 	{
 		return Vector3f(std::min(a.x, b.x),
@@ -115,4 +130,3 @@ public:
 	}
 };
 
-StlFile slt_read(const char* name);

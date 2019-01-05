@@ -5,14 +5,8 @@
 
 int main(int argc, char** argv) {
 
-	if (argc < 2) {
-		std::cerr << "program requires at least one argument of filename\n";
-		return 1;
-	}
-
-	StlFile stl = slt_read(argv[1]);
-	
-	return 0;
+	StlFile stl;
+	return stl.stl_read("../models/squarehead.stl");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -59,7 +59,8 @@ int main(int argc, char** argv)
 	}
 
 
-	StlFile stl = slt_read(argv[1]);
+	StlFile stl;
+	stl.stl_read("../models/squarehead.stl");
 
 	Octree root0(&stl, 5, 5);
 	{

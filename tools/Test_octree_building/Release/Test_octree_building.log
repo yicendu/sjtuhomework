@@ -1,0 +1,8 @@
+﻿  facepair.cpp
+c:\users\dianxin\desktop\workshop\software fundamental\project\sjtuhomework\src\facepair.cpp(431): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  octree.cpp
+c:\users\dianxin\desktop\workshop\software fundamental\project\sjtuhomework\src\octree.cpp(254): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  stlloading.cpp
+c:\users\dianxin\desktop\workshop\software fundamental\project\sjtuhomework\src\stlloading.cpp(102): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Test_octree_building.cpp
+c:\users\dianxin\desktop\workshop\software fundamental\project\sjtuhomework\tools\test_octree_building\test_octree_building.cpp(92): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
