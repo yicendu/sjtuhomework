@@ -14,6 +14,11 @@ Vector3f readVector3D(std::istream& is) {
 	return v;
 }
 
+StlFile::~StlFile() {
+	vertices.clear();
+	faces.clear();
+}
+
 // Warning!This method doesn't check the format of the stl file.
 int StlFile::stl_read(const char* name) {
 
@@ -25,9 +30,10 @@ int StlFile::stl_read(const char* name) {
 	}
 	std::string line;
 	getline(file, line);
-	if (line != "solid 0")
+	if (line.compare ("solid 0")!=0) {
 		std::cerr << "The file \"" << name << "\" format is wrong!" << std::endl;
 		return -1;
+	}
 	std::cout << line;
 	int face_index = 0;
 	while (true) {

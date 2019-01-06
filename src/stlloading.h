@@ -60,6 +60,7 @@ public:
 	int a;
 	int b;
 	int c;
+	float color[4] = { 0.4f,0.4f,1.0f,0.8f };
 	Region region;
 };
 
@@ -70,6 +71,7 @@ public:
 	std::vector<Vector3f> vertices;
 	std::unordered_map<Vector3f, int> indexMap;
 	std::vector<EleFace> faces;
+	~StlFile();
 private:
 	bool _isopen;
 public:
@@ -102,14 +104,14 @@ public:
 	}
 
 	Vector3f MinCoord() {
-		Vector3f minCoord = Vector3f(0, 0, 0);
+		Vector3f minCoord = Vector3f(1000, 1000, 1000);
 		for (size_t i = 0; i < vertices.size(); i++)
 			minCoord = minVector3f(vertices[i], minCoord);
 		return minCoord;
 	}
 
 	Vector3f MaxCoord() {
-		Vector3f maxCoord = Vector3f(0, 0, 0);
+		Vector3f maxCoord = Vector3f(-1000, -1000,-1000);
 		for (size_t i = 0; i < vertices.size(); i++)
 			maxCoord = maxVector3f(vertices[i], maxCoord);
 		return maxCoord;

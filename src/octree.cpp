@@ -64,6 +64,14 @@ Octree::Octree(StlFile *stl, float min_length, int max_ele_num)
 
 Octree::~Octree()
 {
+	if (m_is_leaf) {
+		return;
+	}
+	else {
+		for (int i = 0; i < 8; i++) {
+			delete m_sub_node[i];
+		}
+	}
 }
 
 void Octree::splitNode()

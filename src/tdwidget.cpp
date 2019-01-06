@@ -1,4 +1,21 @@
 #include "tdwidget.h"
+#include <QMessageBox>
+#include <QDateTime>
+
+
+inline Vector3f minVector3f(Vector3f a, Vector3f b)
+{
+	return Vector3f(std::min(a.x, b.x),
+		std::min(a.y, b.y),
+		std::min(a.z, b.z));
+}
+
+inline Vector3f maxVector3f(Vector3f a, Vector3f b)
+{
+	return Vector3f(std::max(a.x, b.x),
+		std::max(a.y, b.y),
+		std::max(a.z, b.z));
+}
 
 
 TDWidget::TDWidget(QWidget* parent, const char* name, bool fs) :QGLWidget(parent) {
@@ -127,14 +144,13 @@ void TDWidget::paintGL()
 	//glColor4f(0, 0, 1.0, 1);
 	//glVertex3f(0, 0, 100);
 	//glEnd();
-	glColor4f(0.4, 0.4, 1.0, 0.8);
 	glEnable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLES);
 	glFrontFace(GL_CCW);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for (size_t i = 0; i < fList.size(); i++) {
-		
+		glColor4f(fList[i].color[0], fList[i].color[1], fList[i].color[2], 0.8);
 		EleFace f = fList[i];
 		const Vector3f& pos1 = f.vertex0;
 		const Vector3f& pos2 = f.vertex1;
@@ -282,32 +298,66 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	//std::cout << "debug" << std::endl;
 	if (stlFileMap.find(fileName) != stlFileMap.end())
 	{
+		octreeMap[fileName] = new Octree(stlFileMap[fileName], 2.f, 10);
 		return false; // 模型已存在
 	}
-
 	char tmp[100];
 	QByteArray c = filePath.toLocal8Bit();
 	strcpy(tmp, c.data());
-	StlFile stl;
-	stlFileMap[fileName] = stl;
-	octreeMap[fileName] = Octree(&stlFileMap[fileName], 2.f,10);
+	StlFile *stl_tmp = new StlFile;
+	int flag = stl_tmp->stl_read(tmp);
+	if (flag == 0)
+	{
+		QMessageBox::critical(0,
+			"critical message", "Unable to open",
+			QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox::Cancel | QMessageBox::Escape, 0);
+		return false;
+	}
+	if (flag == -1)
+	{
+		QMessageBox::critical(0,
+			"critical message", "The format is wrong!",
+			QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox::Cancel | QMessageBox::Escape, 0);
+		return false;
+	}
+	for (int i = 0; i < stl_tmp->faces.size(); i++)
+	{
+		stl_tmp->faces[i].color[0] = color;
+		stl_tmp->faces[i].color[1] = color;
+		//stl_tmp.faces[i].color[2] = color;
+	}
+	stlFileMap[fileName] = stl_tmp;
+	octreeMap[fileName] = new Octree(stlFileMap[fileName], 2.f,10);
+	color += 0.3;
+
 	return true;
 }
 
-bool TDWidget::intersection(QString fileName1, QString filePath1, QString fileName2, QString filePath2)
+QString TDWidget::intersection(QString fileName1, QString filePath1, QString fileName2, QString filePath2)
 {
 	fList.clear();
 	llist.clear();
 	loadObjObject(fileName1, filePath1);
 	loadObjObject(fileName2, filePath2);
-	SetBoundaryBox(stlFileMap[fileName1].MinCoord(), stlFileMap[fileName1].MaxCoord());
-	llist = search_inter_lines(&octreeMap[fileName1], &octreeMap[fileName2]);
-	fList = stlFileMap[fileName1].faces;
-	fList.insert(fList.end(), stlFileMap[fileName2].faces.begin(), stlFileMap[fileName2].faces.end());
+	Vector3f mincoord = stlFileMap[fileName1]->MinCoord();
+	Vector3f maxcoord = stlFileMap[fileName1]->MaxCoord();
+
+	mincoord = minVector3f(mincoord, stlFileMap[fileName2]->MinCoord());
+    maxcoord = maxVector3f(maxcoord, stlFileMap[fileName2]->MaxCoord());
+
+	SetBoundaryBox(mincoord, maxcoord);
+	QTime time;
+	time.start();
+	llist = search_inter_lines(octreeMap[fileName1], octreeMap[fileName2]);
+	fList = stlFileMap[fileName1]->faces;
+	fList.insert(fList.end(), stlFileMap[fileName2]->faces.begin(), stlFileMap[fileName2]->faces.end());
 	updateGL();
 	deleteFile(fileName1);
 	deleteFile(fileName2);
-	return true;
+	color = 0.4;
+	return QString::number(time.elapsed());;
 }
 
 void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
@@ -330,63 +380,58 @@ void TDWidget::hideIt()
 	updateGL();
 }
 
-inline Vector3f minVector3f(Vector3f a, Vector3f b)
-{
-	return Vector3f(std::min(a.x, b.x),
-		std::min(a.y, b.y),
-		std::min(a.z, b.z));
-}
-
-inline Vector3f maxVector3f(Vector3f a, Vector3f b)
-{
-	return Vector3f(std::max(a.x, b.x),
-		std::max(a.y, b.y),
-		std::max(a.z, b.z));
-}
-
 void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 {
 	fList.clear();
 	for (int i = 0; i < fileName.size(); i++)
 	{
 		loadObjObject(fileName[i], filePath[i]);
+		//stlFileMap[fileName[i]].faces;
 		if (fList.empty())
-			fList = stlFileMap[fileName[i]].faces;
+			fList = stlFileMap[fileName[i]]->faces;
 		else
-			fList.insert(fList.end(), stlFileMap[fileName[i]].faces.begin(), stlFileMap[fileName[i]].faces.end());
+			fList.insert(fList.end(), stlFileMap[fileName[i]]->faces.begin(), stlFileMap[fileName[i]]->faces.end());
+
 	}
-	Vector3f mincoord= stlFileMap[fileName[COI]].MinCoord();
-	Vector3f maxcoord= stlFileMap[fileName[COI]].MaxCoord();
+	Vector3f mincoord= stlFileMap[fileName[COI]]->MinCoord();
+	Vector3f maxcoord= stlFileMap[fileName[COI]]->MaxCoord();
 	for (int i = 0; i < fileName.size(); i++)
 	{
-		mincoord = minVector3f(mincoord, stlFileMap[fileName[i]].MinCoord());
-		maxcoord = maxVector3f(maxcoord, stlFileMap[fileName[i]].MaxCoord());
+		mincoord = minVector3f(mincoord, stlFileMap[fileName[i]]->MinCoord());
+		maxcoord = maxVector3f(maxcoord, stlFileMap[fileName[i]]->MaxCoord());
 	}
 
 	SetBoundaryBox(mincoord, maxcoord);
 	//SetBoundaryBox(octreeMap[fileName[COI]].m_region.min, octreeMap[fileName[COI]].m_region.max);
 	updateGL();
-	stlFileMap.clear();
+	for (int i = 0; i < fileName.size(); i++) {
+		deleteFile(fileName[i]);
+	}
+	color = 0.4;
 }
 
 void TDWidget::selectFile(QString fileName, QString filePath)
 {
 	loadObjObject(fileName,filePath);
-	fList = stlFileMap[fileName].faces;
-	SetBoundaryBox(stlFileMap[fileName].MinCoord(), stlFileMap[fileName].MaxCoord());
+	fList = stlFileMap[fileName]->faces;
+	SetBoundaryBox(stlFileMap[fileName]->MinCoord(), stlFileMap[fileName]->MaxCoord());
 	//SetBoundaryBox(octreeMap[fileName].m_region.min, octreeMap[fileName].m_region.max);
 	updateGL();
 	deleteFile(fileName);
+	color = 0.4;
 }
 
 void TDWidget::deleteFile(QString fileName)
 {
-	std::map<QString, StlFile>::iterator it;
-	it = stlFileMap.find(fileName);
+	auto it = stlFileMap.find(fileName);
+	auto it_tree = octreeMap.find(fileName);
 	if ( it == stlFileMap.end())
 	{
 		return; 
 	}
+	delete octreeMap[fileName];
+	delete stlFileMap[fileName];
 	stlFileMap.erase(it);
+	octreeMap.erase(it_tree);
 	return;
 }

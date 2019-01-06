@@ -10,55 +10,8 @@ Vector3f vertex[3];
 
 int main(int argc, char** argv)
 {
-	std::cout << "Hello World!" << std::endl;
-	Region root_region = { 0,0,0,180 };
-
-	Octree root(0, root_region, 2, 5);
-
-	srand((int)time(NULL));
-	for (int i = 0; i < 1000000; i++) {
-		float mid_x = (float)(rand() % 180 + (float)(rand() % 1000) / 1000);
-		float mid_y = (float)(rand() % 180 + (float)(rand() % 1000) / 1000);
-		float mid_z = (float)(rand() % 180 + (float)(rand() % 1000) / 1000);
-
-		for (int j = 0; j < 3; j++) {
-			vertex[j].x = mid_x + (float)(rand() % 1000) / 2000;
-			vertex[j].y = mid_y + (float)(rand() % 1000) / 2000;
-			vertex[j].z = mid_z + (float)(rand() % 1000) / 2000;
-		}
-
-
-		ele[i].vertex0 = vertex[0];
-		ele[i].vertex1 = vertex[1];
-		ele[i].vertex2 = vertex[2];
-		Vector3f region_min = min(vertex[0], vertex[1], vertex[2]);
-		Vector3f region_max = max(vertex[0], vertex[1], vertex[2]);
-		ele[i].region.x = region_min.x;
-		ele[i].region.y = region_min.y;
-		ele[i].region.z = region_min.z;
-		ele[i].region.length = max(region_max - region_min);
-		root.insertEle(ele + i);
-	}
 	{
-		Region test;
-		test.x = 0;
-		test.y = 0;
-		test.z = 0;
-		test.length = 2;
-		std::set<EleFace*> eles = root.queryEles(test);
-		std::set<EleFace*>::iterator ele;
-		for (ele = eles.begin(); ele != eles.end(); ele++) {
-			EleFace* face = *ele;
-			std::cout << face->vertex0 << std::endl << face->vertex1 << std::endl << face->vertex2 << std::endl;
-		}
-	}
-
-	if (argc < 2) {
-		std::cerr << "program requires at least one argument of filename" << std::endl;
-		return 1;
-	}
-
-
+	
 	StlFile stl;
 	stl.stl_read("../models/squarehead.stl");
 
@@ -77,6 +30,10 @@ int main(int argc, char** argv)
 			std::cout << face->vertex0 << std::endl << face->vertex1 << std::endl << face->vertex2 << std::endl;
 		}
 	}
+
+	}
+	int b = 0;
+	int a = 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
