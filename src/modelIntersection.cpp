@@ -52,6 +52,35 @@ void ModelIntersection::onAddFileToList()
 		QFileInfo currentFile = ui.lineEdit->text();
 		fileList << currentFile.absoluteFilePath();
 		nameList << currentFile.fileName();
+		if (ui.comboBox1->findText(currentFile.fileName()) != -1)
+		{
+			QMessageBox::critical(0,
+				"critical message", "Please select different model!",
+				QMessageBox::Ok | QMessageBox::Default,
+				QMessageBox::Cancel | QMessageBox::Escape, 0);
+			return;
+		}
+		StlFile model_tmp;
+		char tmp[100];
+		QByteArray c = currentFile.absoluteFilePath().toLocal8Bit();
+		strcpy(tmp, c.data());
+		int flag = model_tmp.stl_read(tmp);
+		if (flag == 0)
+		{
+			QMessageBox::critical(0,
+				"critical message", "Unable to open",
+				QMessageBox::Ok | QMessageBox::Default,
+				QMessageBox::Cancel | QMessageBox::Escape, 0);
+			return;
+		}
+		if (flag == -1)
+		{
+			QMessageBox::critical(0,
+				"critical message", "The format is wrong!",
+				QMessageBox::Ok | QMessageBox::Default,
+				QMessageBox::Cancel | QMessageBox::Escape, 0);
+			return;
+		}
 		ui.comboBox1->addItem(currentFile.fileName(), currentFile.absoluteFilePath());
 		ui.comboBox2->addItem(currentFile.fileName(), currentFile.absoluteFilePath());
 	}
@@ -145,7 +174,10 @@ void ModelIntersection::onIntersection()
 		QString tmp_path1 = ui.comboBox1->currentData().toString();
 		QString tmp_name2 = ui.comboBox2->currentText();
 		QString tmp_path2 = ui.comboBox2->currentData().toString();
-		ui.openGLWidget->intersection(tmp_name1, tmp_path1, tmp_name2, tmp_path2);
+		ui.textBrowser->append("Intersection start!");
+		QString time_rec=ui.openGLWidget->intersection(tmp_name1, tmp_path1, tmp_name2, tmp_path2);
+		ui.textBrowser->append("Intersection complete!");
+		ui.textBrowser->append("The time spent on intersection is " + time_rec +"ms.");
 	}
 }
 

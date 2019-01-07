@@ -19,7 +19,7 @@ int main()
 		vertex[1] = { i,k,0 };
 		vertex[2] = { k,i,0 };
 		EleFace *tmpEle = new EleFace(normal, vertex[0], vertex[1], vertex[2]);
-		tree_a.insertEle(tmpEle);
+		tree_a.insert_ele(tmpEle);
 	}
 
 	for (int j = 1; j < 9; j++)
@@ -32,7 +32,7 @@ int main()
 		vertex[1] = { i,k,0 };
 		vertex[2] = { k,i,0 };
 		EleFace *tmpEle = new EleFace(normal, vertex[0], vertex[1], vertex[2]);
-		tree_b.insertEle(tmpEle);
+		tree_b.insert_ele(tmpEle);
 	}
 	
 	std::cout << search_inter_lines(&tree_a, &tree_b).size();

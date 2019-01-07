@@ -6,20 +6,24 @@
 #include <set>
 #include "stlloading.h"
 #include "facepair.h"
-//octree is a cubic tree. Each length of its eages is the same.
 
-bool isRegionIntersected(Region a, Region b);
+bool is_region_intersected(Region a, Region b);
 
+// OcTree is a cubic tree. Each length of its eages is the same.
+// Example:
+//    StlFile stl = StlFile("../models/squarehead.stl");
+//    Octree* stl_octree = new Octree(stl, 2.f, 10);
+//    ...
+//    delete Octree;
 class Octree
 {
 public:
-	Octree() {};
 	Octree(int depth, Region region, float min_length, int max_ele_num);
 	Octree(StlFile *stl, float min_length, int max_ele_num);
 	~Octree();
 
-	void insertEle(EleFace* ele);
-	std::set<EleFace*> queryEles(Region region);
+	void insert_ele(EleFace* ele);
+	std::set<EleFace*> query_eles(Region region);
 	Region	m_region;
 	bool	m_is_leaf;
 	Octree*	m_sub_node[8];
@@ -31,18 +35,5 @@ public:
 	std::set<EleFace*> getEles() { return m_eles; }
 	Octree* getSubNodes(int i) { return m_sub_node[i]; }
 private:
-	void splitNode();
-};
-
-//储存两棵树之间可能相交的两组三角形
-
-class pair_octree
-{
-public:
-	pair_octree(Octree* A, Octree* B) {
-		a = A;
-		b = B;
-	}
-	Octree* a;
-	Octree* b;
+	void split_node();
 };
