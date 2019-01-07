@@ -1,6 +1,5 @@
 #include "ModelIntersection.h"
 #include <QtWidgets/QApplication>
-#include <QmessageBox>
 
 int main(int argc, char *argv[])
 {

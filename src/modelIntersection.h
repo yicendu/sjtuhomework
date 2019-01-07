@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_ModelIntersection.h"
 #include <QStringList>
+#include <QTime>
 
 class ModelIntersection : public QMainWindow
 {
@@ -26,6 +27,4 @@ private slots:
 	void deleteModelTwo();
 	void onIntersection();
 	void onDisplayIntersection();
-
-
 };
