@@ -15,9 +15,10 @@ Vector3f readVector3D(std::istream& is) {
 }
 
 StlFile::~StlFile() {
-	vertices.clear();
-	faces.clear();
+	m_vertices.clear();
+	m_faces.clear();
 }
+
 
 // Warning!This method doesn't check the format of the stl file.
 int StlFile::stl_read(const char* name) {
@@ -26,19 +27,21 @@ int StlFile::stl_read(const char* name) {
 	file.open(name);
 	if (!file.is_open()) {
 		std::cerr << "Unable to open " << name << std::endl;
+		file.close();
 		return 0;
 	}
 	std::string line;
 	getline(file, line);
 	if (line.compare ("solid 0")!=0) {
 		std::cerr << "The file \"" << name << "\" format is wrong!" << std::endl;
+		file.close();
 		return -1;
 	}
 	std::cout << line;
-	int face_index = 0;
 	while (true) {
 		file >> line;
-		if (line == "endsolid") {
+
+		if (line.compare("endsolid")==0) {
 			break;
 		}
 		Vector3f normal = readVector3D(file);
@@ -46,10 +49,11 @@ int StlFile::stl_read(const char* name) {
 		Vector3f A = readVector3D(file);
 		Vector3f B = readVector3D(file);
 		Vector3f C = readVector3D(file);
-		EleFace face(normal, A, B, C, 
-					 getVector(A), getVector(B), getVector(C), face_index);
-		face_index += 1;
-		faces.push_back(face);
+		m_vertices.push_back(A);
+		m_vertices.push_back(B);
+		m_vertices.push_back(C);
+		EleFace face(normal, A, B, C);
+		m_faces.push_back(face);
 		getline(file, line);
 		getline(file, line);
 	}
@@ -62,52 +66,23 @@ int StlFile::stl_read(const char* name) {
 
 // I am not sure whether we need the index of the vertexes in the stl instance.
 
-EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index) {
-	EleFace::normal = normal;
-	EleFace::vertex0 = vertex0;
-	EleFace::vertex1 = vertex1;
-	EleFace::vertex2 = vertex2;
-	vertex[0] = vertex0;
-	vertex[1] = vertex1;
-	vertex[2] = vertex2;
+EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+	EleFace::m_normal = normal;
+	EleFace::m_vertex0 = vertex0;
+	EleFace::m_vertex1 = vertex1;
+	EleFace::m_vertex2 = vertex2;
+	m_vertex[0] = vertex0;
+	m_vertex[1] = vertex1;
+	m_vertex[2] = vertex2;
 	for (int i = 0; i < 3; i++) {
-		edge[i].init(vertex[i], vertex[(i + 1) % 3]);
+		m_edge[i]= Edge(m_vertex[i], m_vertex[(i + 1) % 3]);
 	}
 	Vector3f region_min = min(vertex0, vertex1, vertex2);
 	Vector3f region_max = max(vertex0, vertex1, vertex2);
-	EleFace::region.x = region_min.x;
-	EleFace::region.y = region_min.y;
-	EleFace::region.z = region_min.z;
-	EleFace::region.length = max(region_max - region_min);
-	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
-	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
-	EleFace::index = index;
-	a = -1;
-	b = -1;
-	c = -1;
-}
-
-EleFace::EleFace(Vector3f normal, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2, int index, int a, int b, int c) {
-	EleFace::normal = normal;
-	EleFace::vertex0 = vertex0;
-	EleFace::vertex1 = vertex1;
-	EleFace::vertex2 = vertex2;
-	vertex[0] = vertex0;
-	vertex[1] = vertex1;
-	vertex[2] = vertex2;
-	for (int i = 0; i < 3; i++) {
-		edge[i].init(vertex[i], vertex[(i + 1) % 3]);
-	}
-	Vector3f region_min = min(vertex0, vertex1, vertex2);
-	Vector3f region_max = max(vertex0, vertex1, vertex2);
-	EleFace::region.x = region_min.x;
-	EleFace::region.y = region_min.y;
-	EleFace::region.z = region_min.z;
-	EleFace::region.length = max(region_max - region_min);
-	EleFace::region.min = Vector3f(EleFace::region.x, EleFace::region.y, EleFace::region.z);
-	EleFace::region.max = Vector3f(EleFace::region.x + EleFace::region.length, EleFace::region.y + EleFace::region.length, EleFace::region.z + EleFace::region.length);
-	EleFace::index = index;
-	EleFace::a = a;
-	EleFace::b = b;
-	EleFace::c = c;
+	EleFace::m_region.m_x = region_min.x;
+	EleFace::m_region.m_y = region_min.y;
+	EleFace::m_region.m_z = region_min.z;
+	EleFace::m_region.m_length = max(region_max - region_min);
+	EleFace::m_region.m_min = Vector3f(EleFace::m_region.m_x, EleFace::m_region.m_y, EleFace::m_region.m_z);
+	EleFace::m_region.m_max = Vector3f(EleFace::m_region.m_x + EleFace::m_region.m_length, EleFace::m_region.m_y + EleFace::m_region.m_length, EleFace::m_region.m_z + EleFace::m_region.m_length);
 }

@@ -150,12 +150,12 @@ void TDWidget::paintGL()
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for (size_t i = 0; i < fList.size(); i++) {
-		glColor4f(fList[i].color[0], fList[i].color[1], fList[i].color[2], 0.8);
+		glColor4f(fList[i].m_color[0], fList[i].m_color[1], fList[i].m_color[2], 0.8);
 		EleFace f = fList[i];
-		const Vector3f& pos1 = f.vertex0;
-		const Vector3f& pos2 = f.vertex1;
-		const Vector3f& pos3 = f.vertex2;
-		Vector3f normal = f.normal/ f.normal.L2Norm();
+		const Vector3f& pos1 = f.m_vertex0;
+		const Vector3f& pos2 = f.m_vertex1;
+		const Vector3f& pos3 = f.m_vertex2;
+		Vector3f normal = f.m_normal/ f.m_normal.L2Norm();
 		glNormal3f(normal.x, normal.y, normal.z);
 		glVertex3f(pos1.x, pos1.y, pos1.z);
 		glVertex3f(pos2.x, pos2.y, pos2.z);
@@ -322,10 +322,10 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 		return false;
 	}
-	for (int i = 0; i < stl_tmp->faces.size(); i++)
+	for (int i = 0; i < stl_tmp->m_faces.size(); i++)
 	{
-		stl_tmp->faces[i].color[0] = color;
-		stl_tmp->faces[i].color[1] = color;
+		stl_tmp->m_faces[i].m_color[0] = color;
+		stl_tmp->m_faces[i].m_color[1] = color;
 		//stl_tmp.faces[i].color[2] = color;
 	}
 	stlFileMap[fileName] = stl_tmp;
@@ -341,18 +341,18 @@ QString TDWidget::intersection(QString fileName1, QString filePath1, QString fil
 	llist.clear();
 	loadObjObject(fileName1, filePath1);
 	loadObjObject(fileName2, filePath2);
-	Vector3f mincoord = stlFileMap[fileName1]->MinCoord();
-	Vector3f maxcoord = stlFileMap[fileName1]->MaxCoord();
+	Vector3f mincoord = octreeMap[fileName1]->m_region.m_min;
+	Vector3f maxcoord = octreeMap[fileName1]->m_region.m_max;
 
-	mincoord = minVector3f(mincoord, stlFileMap[fileName2]->MinCoord());
-    maxcoord = maxVector3f(maxcoord, stlFileMap[fileName2]->MaxCoord());
+	mincoord = minVector3f(mincoord, octreeMap[fileName2]->m_region.m_min);
+    maxcoord = maxVector3f(maxcoord, octreeMap[fileName2]->m_region.m_max);
 
 	SetBoundaryBox(mincoord, maxcoord);
 	QTime time;
 	time.start();
 	llist = search_inter_lines(octreeMap[fileName1], octreeMap[fileName2]);
-	fList = stlFileMap[fileName1]->faces;
-	fList.insert(fList.end(), stlFileMap[fileName2]->faces.begin(), stlFileMap[fileName2]->faces.end());
+	fList = stlFileMap[fileName1]->m_faces;
+	fList.insert(fList.end(), stlFileMap[fileName2]->m_faces.begin(), stlFileMap[fileName2]->m_faces.end());
 	updateGL();
 	deleteFile(fileName1);
 	deleteFile(fileName2);
@@ -388,17 +388,17 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 		loadObjObject(fileName[i], filePath[i]);
 		//stlFileMap[fileName[i]].faces;
 		if (fList.empty())
-			fList = stlFileMap[fileName[i]]->faces;
+			fList = stlFileMap[fileName[i]]->m_faces;
 		else
-			fList.insert(fList.end(), stlFileMap[fileName[i]]->faces.begin(), stlFileMap[fileName[i]]->faces.end());
+			fList.insert(fList.end(), stlFileMap[fileName[i]]->m_faces.begin(), stlFileMap[fileName[i]]->m_faces.end());
 
 	}
-	Vector3f mincoord= stlFileMap[fileName[COI]]->MinCoord();
-	Vector3f maxcoord= stlFileMap[fileName[COI]]->MaxCoord();
+	Vector3f mincoord= octreeMap[fileName[COI]]->m_region.m_min;
+	Vector3f maxcoord= octreeMap[fileName[COI]]->m_region.m_max;
 	for (int i = 0; i < fileName.size(); i++)
 	{
-		mincoord = minVector3f(mincoord, stlFileMap[fileName[i]]->MinCoord());
-		maxcoord = maxVector3f(maxcoord, stlFileMap[fileName[i]]->MaxCoord());
+		mincoord = minVector3f(mincoord, octreeMap[fileName[i]]->m_region.m_min);
+		maxcoord = maxVector3f(maxcoord, octreeMap[fileName[i]]->m_region.m_max);
 	}
 
 	SetBoundaryBox(mincoord, maxcoord);
@@ -413,9 +413,8 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 void TDWidget::selectFile(QString fileName, QString filePath)
 {
 	loadObjObject(fileName,filePath);
-	fList = stlFileMap[fileName]->faces;
-	SetBoundaryBox(stlFileMap[fileName]->MinCoord(), stlFileMap[fileName]->MaxCoord());
-	//SetBoundaryBox(octreeMap[fileName].m_region.min, octreeMap[fileName].m_region.max);
+	fList = stlFileMap[fileName]->m_faces;
+	SetBoundaryBox(octreeMap[fileName]->m_region.m_min, octreeMap[fileName]->m_region.m_max);
 	updateGL();
 	deleteFile(fileName);
 	color = 0.4;
