@@ -60,6 +60,9 @@ void ModelIntersection::onAddFileToList()
 				QMessageBox::Cancel | QMessageBox::Escape, 0);
 			return;
 		}
+		QTime time;
+		time.start();
+		
 		StlFile model_tmp;
 		char tmp[100];
 		QByteArray c = currentFile.absoluteFilePath().toLocal8Bit();
@@ -83,6 +86,7 @@ void ModelIntersection::onAddFileToList()
 		}
 		ui.comboBox1->addItem(currentFile.fileName(), currentFile.absoluteFilePath());
 		ui.comboBox2->addItem(currentFile.fileName(), currentFile.absoluteFilePath());
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 	}
 }
 
@@ -96,10 +100,13 @@ void ModelIntersection::showModelOne()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		QString tmp_name = ui.comboBox1->currentText();
 		QString tmp_path = ui.comboBox1->currentData().toString();
 		ui.textBrowser->append("Model 1 is " + tmp_name);
 		ui.openGLWidget_2->selectFile(tmp_name.toUtf8(),tmp_path.toUtf8());
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed())+ "mm");
 	}
 }
 
@@ -113,11 +120,14 @@ void ModelIntersection::showModelTwo()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		QString tmp_name = ui.comboBox2->currentText();
 		QString tmp_path = ui.comboBox2->currentData().toString();
 		ui.textBrowser->append("Model 2 is " + tmp_name);
 		//ui.openGLWidget_3->loadObjObject(tmp.toUtf8());
 		ui.openGLWidget_3->selectFile(tmp_name.toUtf8(), tmp_path.toUtf8());
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 	}
 }
 
@@ -131,12 +141,15 @@ void ModelIntersection::deleteModelOne()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		int deleteFile = ui.comboBox1->currentIndex();
 		QString deleteFileName = ui.comboBox1->currentText();
 		ui.comboBox1->removeItem(deleteFile);
 		ui.comboBox2->removeItem(deleteFile);
 		ui.openGLWidget_2->deleteFile(deleteFileName.toUtf8());
 		ui.openGLWidget_3->deleteFile(deleteFileName.toUtf8());
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 
 	}
 }
@@ -151,12 +164,15 @@ void ModelIntersection::deleteModelTwo()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		int deleteFile = ui.comboBox2->currentIndex();
 		QString deleteFileName = ui.comboBox1->currentText();
 		ui.comboBox1->removeItem(deleteFile);
 		ui.comboBox2->removeItem(deleteFile);
 		ui.openGLWidget_2->deleteFile(deleteFileName.toUtf8());
 		ui.openGLWidget_3->deleteFile(deleteFileName.toUtf8());
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 	}
 }
 
@@ -170,6 +186,8 @@ void ModelIntersection::onIntersection()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		QString tmp_name1 = ui.comboBox1->currentText();
 		QString tmp_path1 = ui.comboBox1->currentData().toString();
 		QString tmp_name2 = ui.comboBox2->currentText();
@@ -178,6 +196,7 @@ void ModelIntersection::onIntersection()
 		QString time_rec=ui.openGLWidget->intersection(tmp_name1, tmp_path1, tmp_name2, tmp_path2);
 		ui.textBrowser->append("Intersection complete!");
 		ui.textBrowser->append("The time spent on intersection is " + time_rec +"ms.");
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 	}
 }
 
@@ -191,6 +210,8 @@ void ModelIntersection::onDisplayIntersection()
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 	}
 	else {
+		QTime time;
+		time.start();
 		QStringList fileName;
 		QStringList filePath;
 		QString tmp_name = ui.comboBox1->currentText();
@@ -204,5 +225,6 @@ void ModelIntersection::onDisplayIntersection()
 		filePath << tmp_path;
 
 		ui.openGLWidget->showAllFile(fileName, filePath);
+		ui.textBrowser->append("runtime" + QString::number(time.elapsed()) + "mm");
 	}
 }
