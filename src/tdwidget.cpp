@@ -362,6 +362,9 @@ QString TDWidget::intersection(QString fileName1, QString filePath1, QString fil
 
 void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	double PI = 3.14159265358979323846;
+	transVec = QVector3D(0, 0, 0);
+	yaw = 0;
+	pitch = 0;
 	double radius = (bmax - bmin).L2Norm();
 	g_center = 0.5 * (bmin + bmax);
 	zNear = 0.3 * radius / sin(0.5 * g_fov * PI / 180.0);
@@ -372,6 +375,10 @@ void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	sdepth = g_sdepth;
 	transVec[2] = -sdepth;
 	m_flag = true;
+	transVec_old = QVector3D(0, 0, 0);
+	mdepth_old = 0;
+	yaw_old = 0;
+	pitch_old = 0;
 }
 
 void TDWidget::hideIt()
@@ -383,6 +390,7 @@ void TDWidget::hideIt()
 void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 {
 	fList.clear();
+	llist.clear();
 	for (int i = 0; i < fileName.size(); i++)
 	{
 		loadObjObject(fileName[i], filePath[i]);
