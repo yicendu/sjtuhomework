@@ -100,8 +100,6 @@ void TDWidget::paintGL()
 	//glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
 	if (m_flag)
 	{
-		yaw_old = yaw;
-		pitch_old = pitch;
 		glTranslatef(transVec[0], transVec[1], transVec[2] + mdepth);
 		//glTranslatef(0, 0, mdepth);
 
@@ -152,12 +150,12 @@ void TDWidget::paintGL()
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for (size_t i = 0; i < fList.size(); i++) {
-		glColor4f(fList[i].color[0], fList[i].color[1], fList[i].color[2], 0.8);
+		glColor4f(fList[i].m_color[0], fList[i].m_color[1], fList[i].m_color[2], 0.8);
 		EleFace f = fList[i];
-		const Vector3f& pos1 = f.vertex0;
-		const Vector3f& pos2 = f.vertex1;
-		const Vector3f& pos3 = f.vertex2;
-		Vector3f normal = f.normal/ f.normal.L2Norm();
+		const Vector3f& pos1 = f.m_vertex0;
+		const Vector3f& pos2 = f.m_vertex1;
+		const Vector3f& pos3 = f.m_vertex2;
+		Vector3f normal = f.m_normal/ f.m_normal.L2Norm();
 		glNormal3f(normal.x, normal.y, normal.z);
 		glVertex3f(pos1.x, pos1.y, pos1.z);
 		glVertex3f(pos2.x, pos2.y, pos2.z);
@@ -258,10 +256,10 @@ void TDWidget::mouseMoveEvent(QMouseEvent *e)
 		pitch += yoffset;
 
 		//可以用来设置俯仰角的上下界  
-		//if (pitch > 89.0f)
-		//	pitch = 89.0f;
-		//if (pitch < -89.0f)
-		//	pitch = -89.0f;
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
 	}
 	else if (e->buttons() == Qt::RightButton)
 	{
@@ -300,14 +298,14 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 	//std::cout << "debug" << std::endl;
 	if (stlFileMap.find(fileName) != stlFileMap.end())
 	{
+		octreeMap[fileName] = new Octree(stlFileMap[fileName], 2.f, 10);
 		return false; // 模型已存在
 	}
-
 	char tmp[100];
 	QByteArray c = filePath.toLocal8Bit();
 	strcpy(tmp, c.data());
-	StlFile stl_tmp;
-	int flag = stl_tmp.stl_read(tmp);
+	StlFile *stl_tmp = new StlFile;
+	int flag = stl_tmp->stl_read(tmp);
 	if (flag == 0)
 	{
 		QMessageBox::critical(0,
@@ -324,14 +322,14 @@ bool TDWidget::loadObjObject(QString fileName, QString filePath)
 			QMessageBox::Cancel | QMessageBox::Escape, 0);
 		return false;
 	}
-	stlFileMap[fileName] = stl_tmp;
-	for (int i = 0; i < stlFileMap[fileName].faces.size(); i++)
+	for (int i = 0; i < stl_tmp->m_faces.size(); i++)
 	{
-		stlFileMap[fileName].faces[i].color[0] = color;
-		stlFileMap[fileName].faces[i].color[1] = color;
-		//stlFileMap[fileName].faces[i].color[2] = color;
+		stl_tmp->m_faces[i].m_color[0] = color;
+		stl_tmp->m_faces[i].m_color[1] = color;
+		//stl_tmp.faces[i].color[2] = color;
 	}
-	octreeMap[fileName] = Octree(&stlFileMap[fileName], 2.f,10);
+	stlFileMap[fileName] = stl_tmp;
+	octreeMap[fileName] = new Octree(stlFileMap[fileName], 2.f,10);
 	color += 0.3;
 
 	return true;
@@ -341,23 +339,20 @@ QString TDWidget::intersection(QString fileName1, QString filePath1, QString fil
 {
 	fList.clear();
 	llist.clear();
-
 	loadObjObject(fileName1, filePath1);
 	loadObjObject(fileName2, filePath2);
-	Vector3f mincoord = stlFileMap[fileName1].MinCoord();
-	Vector3f maxcoord = stlFileMap[fileName1].MaxCoord();
+	Vector3f mincoord = octreeMap[fileName1]->m_region.m_min;
+	Vector3f maxcoord = octreeMap[fileName1]->m_region.m_max;
 
-	mincoord = minVector3f(mincoord, stlFileMap[fileName2].MinCoord());
-    maxcoord = maxVector3f(maxcoord, stlFileMap[fileName2].MaxCoord());
+	mincoord = minVector3f(mincoord, octreeMap[fileName2]->m_region.m_min);
+    maxcoord = maxVector3f(maxcoord, octreeMap[fileName2]->m_region.m_max);
 
 	SetBoundaryBox(mincoord, maxcoord);
 	QTime time;
 	time.start();
-	might_intersected_faces_list a_b(&octreeMap[fileName1], &octreeMap[fileName2]);
-	
-	llist = a_b.intersectLine_list;
-	fList = stlFileMap[fileName1].faces;
-	fList.insert(fList.end(), stlFileMap[fileName2].faces.begin(), stlFileMap[fileName2].faces.end());
+	llist = search_inter_lines(octreeMap[fileName1], octreeMap[fileName2]);
+	fList = stlFileMap[fileName1]->m_faces;
+	fList.insert(fList.end(), stlFileMap[fileName2]->m_faces.begin(), stlFileMap[fileName2]->m_faces.end());
 	updateGL();
 	deleteFile(fileName1);
 	deleteFile(fileName2);
@@ -380,7 +375,7 @@ void TDWidget::SetBoundaryBox(const Vector3f& bmin, const Vector3f& bmax) {
 	sdepth = g_sdepth;
 	transVec[2] = -sdepth;
 	m_flag = true;
-	transVec_old = QVector3D(0,0,0);
+	transVec_old = QVector3D(0, 0, 0);
 	mdepth_old = 0;
 	yaw_old = 0;
 	pitch_old = 0;
@@ -401,17 +396,17 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 		loadObjObject(fileName[i], filePath[i]);
 		//stlFileMap[fileName[i]].faces;
 		if (fList.empty())
-			fList = stlFileMap[fileName[i]].faces;
+			fList = stlFileMap[fileName[i]]->m_faces;
 		else
-			fList.insert(fList.end(), stlFileMap[fileName[i]].faces.begin(), stlFileMap[fileName[i]].faces.end());
+			fList.insert(fList.end(), stlFileMap[fileName[i]]->m_faces.begin(), stlFileMap[fileName[i]]->m_faces.end());
 
 	}
-	Vector3f mincoord= stlFileMap[fileName[COI]].MinCoord();
-	Vector3f maxcoord= stlFileMap[fileName[COI]].MaxCoord();
+	Vector3f mincoord= octreeMap[fileName[COI]]->m_region.m_min;
+	Vector3f maxcoord= octreeMap[fileName[COI]]->m_region.m_max;
 	for (int i = 0; i < fileName.size(); i++)
 	{
-		mincoord = minVector3f(mincoord, stlFileMap[fileName[i]].MinCoord());
-		maxcoord = maxVector3f(maxcoord, stlFileMap[fileName[i]].MaxCoord());
+		mincoord = minVector3f(mincoord, octreeMap[fileName[i]]->m_region.m_min);
+		maxcoord = maxVector3f(maxcoord, octreeMap[fileName[i]]->m_region.m_max);
 	}
 
 	SetBoundaryBox(mincoord, maxcoord);
@@ -426,9 +421,8 @@ void TDWidget::showAllFile(QStringList fileName, QStringList filePath, int COI)
 void TDWidget::selectFile(QString fileName, QString filePath)
 {
 	loadObjObject(fileName,filePath);
-	fList = stlFileMap[fileName].faces;
-	SetBoundaryBox(stlFileMap[fileName].MinCoord(), stlFileMap[fileName].MaxCoord());
-	//SetBoundaryBox(octreeMap[fileName].m_region.min, octreeMap[fileName].m_region.max);
+	fList = stlFileMap[fileName]->m_faces;
+	SetBoundaryBox(octreeMap[fileName]->m_region.m_min, octreeMap[fileName]->m_region.m_max);
 	updateGL();
 	deleteFile(fileName);
 	color = 0.4;
@@ -436,14 +430,14 @@ void TDWidget::selectFile(QString fileName, QString filePath)
 
 void TDWidget::deleteFile(QString fileName)
 {
-	std::map<QString, StlFile>::iterator it;
-	std::map<QString, Octree>::iterator it_tree;
-	it = stlFileMap.find(fileName);
-	it_tree = octreeMap.find(fileName);
+	auto it = stlFileMap.find(fileName);
+	auto it_tree = octreeMap.find(fileName);
 	if ( it == stlFileMap.end())
 	{
 		return; 
 	}
+	delete octreeMap[fileName];
+	delete stlFileMap[fileName];
 	stlFileMap.erase(it);
 	octreeMap.erase(it_tree);
 	return;
